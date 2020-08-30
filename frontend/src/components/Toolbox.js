@@ -10,7 +10,7 @@ export const Toolbox = () => {
     const { connectors } = useEditor();
 
     return (
-        <Box px={2} py={2}>
+        <Box boxShadow={10} px={2} py={2} style={{marginTop: '63px'}}>
             <Grid container direction="column" alignItems="center" justify="center" spacing={1}>
                 <Box pb={2}>
                     <Typography>Drag to add</Typography>

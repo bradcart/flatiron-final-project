@@ -3,10 +3,22 @@ import { Paper, FormControl, FormLabel, Slider, ClickAwayListener } from "@mater
 import ColorPicker from "material-ui-color-picker";
 import { useNode } from "@craftjs/core";
 
-export const Container = ({ background, padding = 0, children }) => {
+export const Container = ({ background, padding = 0, margin, marginTop, overflow, width, height, minHeight, alignItems, variant, children }) => {
     const { connectors: { connect, drag } } = useNode();
     return (
-        <Paper ref={ref => connect(drag(ref))} style={{ background, padding: `${padding}px` }}>
+        <Paper ref={ref => connect(drag(ref))} style={{
+            flex: 'unset',
+            background,
+            padding: `${padding}px`,
+            margin: margin,
+            marginTop: marginTop,
+            overflow: overflow,
+            width: width,
+            height: height,
+            minHeight: minHeight,
+            alignItems: alignItems,
+            variant: variant,
+        }}>
             {children}
         </Paper>
     )
@@ -35,7 +47,12 @@ export const ContainerSettings = () => {
 
 export const ContainerDefaultProps = {
     background: "#ffffff",
-    padding: 3
+    padding: 3,
+    margin: 0,
+    width: '100%',
+    height: 'auto',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
 };
 
 Container.craft = {

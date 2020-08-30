@@ -1,8 +1,17 @@
 import React, { useState } from "react";
 import { Box, FormControlLabel, Switch, Grid, Button as MaterialButton, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField, Snackbar } from "@material-ui/core";
 import { useEditor } from "@craftjs/core";
+import { makeStyles } from '@material-ui/core/styles';
 import lz from "lzutf8";
 import copy from 'copy-to-clipboard';
+
+const useStyles = makeStyles({
+    root: {
+        color: 'rgb(240, 245, 243)',
+        borderColor: 'rgb(240, 245, 243)',
+        margin:'0 10px'
+    }
+})
 
 export const Topbar = () => {
     const { actions, query, enabled } = useEditor((state) => ({
@@ -13,19 +22,22 @@ export const Topbar = () => {
     const [snackbarMessage, setSnackbarMessage] = useState();
     const [stateToLoad, setStateToLoad] = useState();
 
+    const classes = useStyles();
+
     return (
-        <Box px={1} py={1} mt={3} mb={1} bgcolor="#cbe8e7">
+        <Box px={1} py={1} mt={0} mb={3} bgcolor="#1B1B1B">
             <Grid container alignItems="center">
                 <Grid item xs>
-                    <FormControlLabel
+                    {/* <FormControlLabel
                         className="enable-disable-toggle"
                         control={<Switch checked={enabled} onChange={(_, value) => actions.setOptions(options => options.enabled = value)} />}
                         label="Enable"
-                    />
+                    /> */}
+                    <h3 style={{ color: '#F0F5F3', marginLeft: '10px' }}>BRAVURA.</h3>
                 </Grid>
                 <Grid item>
                     <MaterialButton
-                        className="copy-state-btn"
+                        className={classes.root}
                         size="small"
                         variant="outlined"
                         color="secondary"
@@ -38,7 +50,7 @@ export const Topbar = () => {
                         Copy current state
           </MaterialButton>
                     <MaterialButton
-                        className="load-state-btn"
+                        className={classes.root}
                         size="small"
                         variant="outlined"
                         color="secondary"
