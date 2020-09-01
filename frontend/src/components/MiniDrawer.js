@@ -1,27 +1,26 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
+import { Drawer, AppBar, Toolbar, List, Typography, Divider, IconButton, ListItem, ListItemIcon, ListItemText, Button as MaterialButton, Box, Grid, Tooltip, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField, Snackbar } from '@material-ui/core';
+import { Element, useEditor } from "@craftjs/core";
+import lz from "lzutf8";
+import copy from 'copy-to-clipboard';
+
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
-import TextIcon from '@material-ui/icons/TextFields'
-import { useEditor } from "@craftjs/core";
-import lz from "lzutf8";
-import copy from 'copy-to-clipboard';
-import { Button as MaterialButton, Box, Grid, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField, Snackbar } from '@material-ui/core';
+import TextFieldsIcon from '@material-ui/icons/TextFields';
+import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
+import CropLandscapeIcon from '@material-ui/icons/CropLandscape';
+import ViewDayOutlinedIcon from '@material-ui/icons/ViewDayOutlined';
+import MovieOutlinedIcon from '@material-ui/icons/MovieOutlined';
+import LibraryMusicOutlinedIcon from '@material-ui/icons/LibraryMusicOutlined';
+
 import { Text } from './user/Text';
+import { Button } from './user/Button';
+import { Container } from './user/Container';
+import { Card } from './user/Card';
+import { Video } from './user/Video';
 
 const drawerWidth = 240;
 
@@ -86,6 +85,12 @@ const useStyles = makeStyles((theme) => ({
         // necessary for content to be below app bar
         ...theme.mixins.toolbar,
     },
+    // arrow: {
+    //     color: theme.palette.common.black,
+    // },
+    // tooltip: {
+    //     backgroundColor: theme.palette.common.black,
+    // },
     content: {
         flexGrow: 1,
         padding: theme.spacing(3),
@@ -204,44 +209,81 @@ export const MiniDrawer = () => {
                     />
                 </Toolbar>
             </AppBar>
-                <Drawer
-                    variant="permanent"
-                    className={clsx(classes.drawer, {
+            <Drawer
+                variant="permanent"
+                className={clsx(classes.drawer, {
+                    [classes.drawerOpen]: open,
+                    [classes.drawerClose]: !open,
+                })}
+                classes={{
+                    paper: clsx({
                         [classes.drawerOpen]: open,
                         [classes.drawerClose]: !open,
-                    })}
-                    classes={{
-                        paper: clsx({
-                            [classes.drawerOpen]: open,
-                            [classes.drawerClose]: !open,
-                        }),
-                    }}
-                >
-                    <div className={classes.toolbar}>
-                        <Typography style={{color: '#f50057', margin: '0 auto'}}>DRAG TO ADD</Typography>
-                        <IconButton onClick={handleDrawerClose}>
-                            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-                        </IconButton>
-                    </div>
+                    }),
+                }}
+            >
+                <div className={classes.toolbar}>
+                    <Typography style={{ color: '#f50057', margin: '0 auto' }}>DRAG TO ADD</Typography>
+                    <IconButton onClick={handleDrawerClose}>
+                        {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                    </IconButton>
+                </div>
+                <Divider />
+                <List style={{ marginLeft: '5px' }}>
+                    <ListItem button key='Text' ref={ref => connectors.create(ref, <Text />)}>
+                        <ListItemIcon>
+                            <Tooltip title="Text" placement="right">
+                                <TextFieldsIcon />
+                            </Tooltip>
+                        </ListItemIcon>
+                        <ListItemText primary='Text' />
+                    </ListItem>
+                    <ListItem button key='Button' ref={ref => connectors.create(ref, <Button />)}>
+                        <ListItemIcon>
+                            <Tooltip title="Button" placement="right">
+                                <RadioButtonCheckedIcon />
+                            </Tooltip>
+                        </ListItemIcon>
+                        <ListItemText primary='Button' />
+                    </ListItem>
                     <Divider />
-                    <List>
-                        <ListItem button key='Text' ref={ref => connectors.create(ref, <Text />)}>
-                            <ListItemIcon>
-                                <TextIcon />
-                            </ListItemIcon>
-                            <ListItemText primary='Text' />
-                        </ListItem>
-                    </List>
-                    <Divider />
-                    <List>
-                        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                            <ListItem button key={text}>
-                                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                                <ListItemText primary={text} />
-                            </ListItem>
-                        ))}
-                    </List>
-                </Drawer>
+                    <ListItem button key='Video' ref={ref => connectors.create(ref, <Video />)}>
+                        <ListItemIcon>
+                            <Tooltip title="Video" placement="right">
+                                <MovieOutlinedIcon />
+                            </Tooltip>
+                        </ListItemIcon>
+                        <ListItemText primary='Video' />
+                    </ListItem>
+                    <ListItem button key='Song' ref={ref => connectors.create(ref, <Element is={Container} padding={20} canvas />)}>
+                        <ListItemIcon>
+                            <Tooltip title="Song" placement="right">
+                                <LibraryMusicOutlinedIcon />
+                            </Tooltip>
+                        </ListItemIcon>
+                        <ListItemText primary='Song' />
+                    </ListItem>
+                </List>
+                <Divider />
+                <List style={{ marginLeft: '5px' }}>
+                    <ListItem button key='Container' ref={ref => connectors.create(ref, <Element is={Container} padding={20} canvas />)}>
+                        <ListItemIcon>
+                            <Tooltip title="Container" placement="right">
+                                <CropLandscapeIcon />
+                            </Tooltip>
+                        </ListItemIcon>
+                        <ListItemText primary='Container' />
+                    </ListItem>
+                    <ListItem button key='Card' ref={ref => connectors.create(ref, <Card />)}>
+                        <ListItemIcon>
+                            <Tooltip title="Card" placement="right">
+                                <ViewDayOutlinedIcon />
+                            </Tooltip>
+                        </ListItemIcon>
+                        <ListItemText primary='Card' />
+                    </ListItem>
+                </List>
+            </Drawer>
         </Box>
     );
 }

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNode } from "@craftjs/core";
 import ContentEditable from 'react-contenteditable';
-import { Slider, FormControl, FormLabel } from "@material-ui/core";
+import { Slider, FormControl, FormLabel, Select, MenuItem } from "@material-ui/core";
+import ColorPicker from "material-ui-color-picker";
+import './Text.css';
 
-export const Text = ({ text, fontSize, textAlign }) => {
+export const Text = ({ text, font, fontSize, textAlign, color }) => {
     const { connectors: { connect, drag }, selected, dragged, actions: { setProp } } = useNode((state) => ({
         selected: state.events.selected,
         dragged: state.events.dragged
@@ -24,16 +26,18 @@ export const Text = ({ text, fontSize, textAlign }) => {
                 disabled={!editable}
                 html={text}
                 onChange={e => setProp(props => props.text = e.target.value.replace(/<\/?[^>]+(>|$)/g, ""))}
-                tagName="p"
-                style={{ fontSize: `${fontSize}px`, textAlign }}
+                tagName={font}
+                style={{ color, fontSize: `${fontSize}px`, textAlign, width: `100%` }}
             />
         </div>
     )
 }
 
 const TextSettings = () => {
-    const { actions: { setProp }, fontSize } = useNode((node) => ({
-        fontSize: node.data.props.fontSize
+    const { actions: { setProp }, font, fontSize, color } = useNode((node) => ({
+        fontSize: node.data.props.fontSize,
+        font: node.data.props.font,
+        color: node.data.props.color
     }));
 
     return (
@@ -41,6 +45,7 @@ const TextSettings = () => {
             <FormControl size="small" component="fieldset">
                 <FormLabel component="legend">Font size</FormLabel>
                 <Slider
+                    color="secondary"
                     value={fontSize || 7}
                     step={7}
                     min={1}
@@ -50,14 +55,37 @@ const TextSettings = () => {
                     }}
                 />
             </FormControl>
+            <FormControl size="small" component="fieldset" margin="normal">
+                <FormLabel component="legend">Font</FormLabel>
+                <Select
+                    id="font-select"
+                    value={font}
+                    onChange={(e) => {
+                        setProp(props => props.font = e.target.value);
+                    }}
+                >
+                    <MenuItem value='p'>Lora</MenuItem>
+                    <MenuItem value='h6'>Raleway</MenuItem>
+                </Select>
+            </FormControl>
+            <FormLabel component="legend">Color</FormLabel> 
+            <FormControl size="small" component="fieldset" margin="normal">
+                <ColorPicker
+                onChange={color => {setProp(props => props.color = color)}}
+                value={color}
+                name='Color'
+                />
+            </FormControl>
         </>
     )
 }
 
+
 Text.craft = {
     props: {
-        text: "Hi",
-        fontSize: 20
+        text: "Enter text here...",
+        fontSize: 20,
+        font: 'p'
     },
     rules: {
         canDrag: (node) => node.data.props.text !== "Drag"

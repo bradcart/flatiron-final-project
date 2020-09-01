@@ -3,6 +3,7 @@ import { Text } from "./Text";
 import { Button } from "./Button";
 import { Container, ContainerSettings, ContainerDefaultProps } from "./Container";
 import { useNode, Element } from "@craftjs/core";
+import { Divider } from "@material-ui/core";
 
 export const CardTop = ({ children }) => {
     const { connectors: { connect } } = useNode();
@@ -40,18 +41,32 @@ export const Card = ({ background, padding = 20 }) => {
     return (
         <Container background={background} padding={padding}>
             <Element id="text" is={CardTop} canvas>
-                <Text text="Title" fontSize={20} />
-                <Text text="Subtitle" fontSize={15} />
+                <Text text="Title." fontSize={24} font='h6' />
             </Element>
+            <Divider />
+            <Element id="body" is='div' canvas>
+                <Text text="Body." fontSize={18} />
+            </Element>
+            <Divider />
             <Element id="buttons" is={CardBottom} canvas>
-                <Button size="small" children="Learn more" variant="contained" color="primary" />
+                <Button size="small" children="Click me" variant="contained" color="primary" />
             </Element>
         </Container>
     )
 }
 
+const CardDefaultProps = {
+    background: "#ffffff",
+    padding: 10,
+    margin: 0,
+    width: '30%',
+    height: '50px',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+};
+
 Card.craft = {
-    props: ContainerDefaultProps,
+    props: CardDefaultProps,
     related: {
         settings: ContainerSettings
     }

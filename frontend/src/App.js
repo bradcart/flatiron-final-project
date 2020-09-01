@@ -6,7 +6,6 @@ import SignUp from './pages/SignUp';
 import BackgroundVideo from './pages/BackgroundVideo';
 import StyledButton from './components/styled/StyledButton';
 
-
 export default function App() {
 
   const [signIn, toggleSignIn] = useState(false);
@@ -31,11 +30,11 @@ export default function App() {
   return (
     <div className="App">
       <Box display="flex" height='100vh' alignItems="center" justifyContent="center">
-      <BackgroundVideo />
+        <BackgroundVideo />
         {buttons ?
           <Grid container justify="center" alignItems="center" spacing={0}>
             <Grid item xs={12} align="center">
-              <h1><span>BRAVURA<sup style={{fontSize: '20px', position: 'relative', bottom: '20px'}}>©</sup></span></h1>
+              <h1><span>BRAVURA<sup style={{ fontSize: '20px', position: 'relative', bottom: '20px' }}>©</sup></span></h1>
             </Grid>
             <Grid item xs={12} align="center" >
               <StyledButton onClick={handleSignIn} label="Sign In" />

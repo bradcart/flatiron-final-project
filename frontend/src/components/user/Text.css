@@ -1,0 +1,14 @@
+p {
+    font-family: 'Lora', serif;
+}
+
+h6 {
+    display: block;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 400;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: 0;
+    margin-right: 0;
+    font-size: 20;
+}
