@@ -1,8 +1,8 @@
 .film-grain {
     height: 100vh;
     background-image: url("broken_noise_@2X.png");
-    background: rgb(46,46,46);
-    background: linear-gradient(25deg, rgba(46,46,46,1) 0%, rgba(37,36,36,1) 50%, rgba(43,43,43,1) 100%);
+    background: rgb(0, 0, 0);
+    background: linear-gradient(25deg, rgb(0, 0, 0) 0%, rgb(14, 14, 14) 80%, rgb(16, 16, 16) 100%);
   }
   
   .film-grain:before {
@@ -17,11 +17,21 @@
     top: -100%;
     width: 300%;
   }
-  
+
   #content {
+    display: contents;
     position:relative;
-    z-index:1;
-  }
+    z-index: 1;
+    margin: auto;
+}
+
+#content::after {
+  background-image: url("paper_1_@2X.png");
+}
+
+  /* .slider {
+    box-shadow: -2px 2px 22px #101010, 2px -2px 22px #121212;
+  } */
   
   @-webkit-keyframes grain {
     0%, 100% { -webkit-transform:translate(0, 0); transform:translate(0, 0) }

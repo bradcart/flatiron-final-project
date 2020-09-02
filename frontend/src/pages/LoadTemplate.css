@@ -1,0 +1,48 @@
+.viewport {
+    background-color: #070707;
+    height: 100vh;
+    width: auto;
+    overflow: hidden;
+}
+
+.headline {
+    color: #F0F5F3;
+    position: relative;
+    z-index: 0;
+    width: 50%;
+    margin: auto;
+    text-align: center;
+}
+
+#load-btn {
+    display: flex;
+    position: absolute;
+    margin-top: -10px;
+    left: 50vw;
+    transform: translateX(-50%);
+    width: 15%;
+    
+}
+
+.container {
+    position: relative;
+    width: auto;
+    max-width: 925px;
+    margin: 7px auto;
+    left: 50%;
+    transform: translateX(-50%);
+}
+  
+.buttonBack {
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.buttonNext {
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    right: 0;
+}

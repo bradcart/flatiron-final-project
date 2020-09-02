@@ -13,3 +13,20 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@font-face {
+  font-family: 'sk_modernist_regular';
+  src:  url('./assets/fonts/Sk-Modernist-Regular.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'basier_square_monoregular';
+  src: url('./assets/fonts/basier/basiersquaremono-regular-webfont.eot');
+  src: url('./assets/fonts/basier/basiersquaremono-regular-webfont.eot?#iefix') format('embedded-opentype'),
+       url('./assets/fonts/basier/basiersquaremono-regular-webfont.woff2') format('woff2'),
+       url('./assets/fonts/basier/basiersquaremono-regular-webfont.woff') format('woff'),
+       url('./assets/fonts/basier/basiersquaremono-regular-webfont.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+
+}

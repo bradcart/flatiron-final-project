@@ -13,18 +13,18 @@ import { ThemeProvider } from '@material-ui/styles';
 import Container from '@material-ui/core/Container';
 import StyledButton from '../components/styled/StyledButton';
 
-function Copyright() {
-    return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
-                Your Website
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
+// function Copyright() {
+//     return (
+//         <Typography variant="body2" color="textSecondary" align="center">
+//             {'Copyright © '}
+//             <Link color="inherit" href="https://material-ui.com/">
+//                 Your Website
+//             </Link>{' '}
+//             {new Date().getFullYear()}
+//             {'.'}
+//         </Typography>
+//     );
+// }
 
 const theme = createMuiTheme({
     palette: {
@@ -60,10 +60,34 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+
 export default function SignIn(props) {
     const classes = useStyles();
-    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('')
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        fetch('http://localhost:3000/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json'
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password
+            })
+        })
+        .then(res => res.json())
+        .then(json => {
+            json["error"] ? 
+            alert('Invalid username and/or password.')
+            :
+            props.logIn(json["user"])
+        })
+    }
 
     return (
         <ThemeProvider theme={theme}>
@@ -73,7 +97,7 @@ export default function SignIn(props) {
                     Sign in
                 </Typography> */}
 
-                    <form className={classes.form} noValidate>
+                    <form className={classes.form} onSubmit={(e) => handleSubmit(e)} noValidate>
                         <TextField
                             inputProps={{
                                 className: classes.input
@@ -82,10 +106,11 @@ export default function SignIn(props) {
                             margin="normal"
                             required
                             fullWidth
-                            id="email"
-                            label="email address"
-                            name="email"
+                            id="username"
+                            label="username"
+                            name="username"
                             autoFocus
+                            onChange={e => setUsername(e.target.value)}
                         />
                         <TextField
                             inputProps={{
@@ -99,11 +124,12 @@ export default function SignIn(props) {
                             label="password"
                             type="password"
                             id="password"
+                            onChange={e => setPassword(e.target.value)}
                         />
                         {/* <FormControlLabel
                         control={<Checkbox value="remember" color="primary" />}
                         label="Remember me"
-                    /> */}
+                        /> */}
                         <Grid container align="flex-start">
                             <StyledButton
                                 type="submit"
