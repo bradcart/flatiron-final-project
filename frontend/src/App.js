@@ -11,13 +11,16 @@ import SignUp from './pages/SignUp';
 import BackgroundVideo from './pages/BackgroundVideo';
 import LoadTemplate from './pages/LoadTemplate';
 import StyledButton from './components/styled/StyledButton';
+import PageView from './pages/PageView';
+import Edit from './pages/Edit';
 
-export default function App() {
+
+const App = () => {
 
   const [signIn, toggleSignIn] = useState(false);
   const [signUp, toggleSignUp] = useState(false);
   const [buttons, toggleButtons] = useState(true);
-  
+
   //keeping this here until logOut is built
   const [loggedIn, isLoggedIn] = useState(false);
 
@@ -36,8 +39,9 @@ export default function App() {
     toggleSignUp(!signUp);
   }
 
-  const handleLogIn = (user) => {
-    sessionStorage.setItem('user', user)
+  const handleLogIn = (json) => {
+    localStorage.setItem('token', json.token);
+    localStorage.setItem('user', JSON.stringify(json.user));
     toggleButtons(false);
     toggleSignIn(false);
     toggleSignUp(false);
@@ -46,11 +50,14 @@ export default function App() {
 
   return (
     <Switch>
-      <Route path="/load" component={LoadTemplate} />
-      <Route path="/">
-        {loggedIn ? <Redirect to="/load" /> : null}
+      <Route path='/templates/:id/edit' component={Edit} />
+      <Route path="/templates" component={LoadTemplate} />
+      <Route path={`/pages/:id`} component={PageView} />
+
+      <Route exact path="/">
+        {loggedIn ? <Redirect to="/templates" /> : null}
+        <BackgroundVideo />
         <Box display="flex" height='100vh' alignItems="center" justifyContent="center">
-          <BackgroundVideo />
           {buttons ?
             <Grid container justify="center" alignItems="center" spacing={0}>
               <Grid item xs={12} align="center">
@@ -73,3 +80,5 @@ export default function App() {
     </Switch>
   );
 };
+
+export default App

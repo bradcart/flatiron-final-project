@@ -1,6 +1,7 @@
 import React from "react";
 import { Paper, FormControl, FormLabel, Slider, ClickAwayListener } from "@material-ui/core";
-import ColorPicker from "material-ui-color-picker";
+// import ColorPicker from "material-ui-color-picker";
+import { CirclePicker } from "react-color";
 import { useNode } from "@craftjs/core";
 
 export const Container = ({ background, padding = 0, margin, marginTop, overflow, width, minWidth, height, minHeight, alignItems, variant, children }) => {
@@ -11,14 +12,14 @@ export const Container = ({ background, padding = 0, margin, marginTop, overflow
             background,
             padding: `${padding}px`,
             margin: '5px 0',
-            marginTop: marginTop,
-            overflow: overflow,
-            width: width,
-            minWidth: minWidth,
-            height: height,
-            minHeight: minHeight,
-            alignItems: alignItems,
-            variant: variant,
+            marginTop,
+            overflow,
+            width,
+            minWidth,
+            height,
+            minHeight,
+            alignItems,
+            variant
         }}>
             {children}
         </Paper>
@@ -33,14 +34,19 @@ export const ContainerSettings = () => {
     return (
         <div>
             <FormControl fullWidth={true} margin="normal" component="fieldset">
-                <FormLabel component="legend">Background</FormLabel>
-                <ColorPicker value={background} onChange={color => {
-                    setProp(props => props.background = color)
+                <FormLabel component="legend" style={{marginBottom: "10px"}}>Background</FormLabel>
+                <CirclePicker
+                    color={background}
+                    colors={["#f44336", "#e91e63", "#9c27b0", "#673ab7", "#3f51b5", "#2196f3", "#03a9f4", "#00bcd4", "#009688"]}
+                    width="130px"
+                    onChange={color => {
+                        setProp(props => props.background = color.hex)
                 }} />
+                {/* <ColorPicker color={background} onChange={color => setProp(props => props.background = color)} /> */}
             </FormControl>
             <FormControl fullWidth={true} margin="normal" component="fieldset">
                 <FormLabel component="legend">Padding</FormLabel>
-                <Slider defaultValue={padding} onChange={(_, value) => setProp(props => props.padding = value)} />
+                <Slider value={padding} onChange={(_, value) => setProp(props => props.padding = value)} />
             </FormControl>
         </div>
     )

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNode } from "@craftjs/core";
+import { useNode, useEditor } from "@craftjs/core";
 import ContentEditable from 'react-contenteditable';
 import { Slider, FormControl, FormLabel, Select, MenuItem } from "@material-ui/core";
 import ColorPicker from "material-ui-color-picker";
@@ -11,19 +11,23 @@ export const Text = ({ text, font, fontSize, textAlign, color }) => {
         dragged: state.events.dragged
     }));
 
-    const [editable, setEditable] = useState(false);
+    const { enabled } = useEditor((state) => ({
+        enabled: state.options.enabled,
+      }));
 
-    useEffect(() => {
-        !selected && setEditable(false)
-    }, [selected]);
+    // const [editable, setEditable] = useState(false);
+
+    // useEffect(() => {
+    //     !selected && setEditable(false)
+    // }, [selected]);
 
     return (
         <div
             ref={ref => connect(drag(ref))}
-            onClick={() => setEditable(true)}
+            // onClick={() => setEditable(true)}
         >
             <ContentEditable
-                disabled={!editable}
+                disabled={!enabled}
                 html={text}
                 onChange={e => setProp(props => props.text = e.target.value.replace(/<\/?[^>]+(>|$)/g, ""))}
                 tagName={font}

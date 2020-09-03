@@ -1,14 +1,16 @@
 import React from 'react';
-import { useNode } from '@craftjs/core';
+import { useNode, useEditor } from '@craftjs/core';
 import { FormControl, FormLabel, Input } from '@material-ui/core';
 import styled from 'styled-components';
 import YouTube from 'react-youtube';
 
 export const Video = ({videoId}) => {
     
-    const { connectors: { connect } } = useNode((node) => ({
+    const { connectors: { connect }, actions: {setProp} } = useNode((node) => ({
         selected: node.events.selected,
     }));
+
+    // const { connectors: { select }} = useEditor();
 
     return (
         <div ref={connect}>

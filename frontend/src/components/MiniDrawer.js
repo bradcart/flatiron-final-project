@@ -15,12 +15,15 @@ import CropLandscapeIcon from '@material-ui/icons/CropLandscape';
 import ViewDayOutlinedIcon from '@material-ui/icons/ViewDayOutlined';
 import MovieOutlinedIcon from '@material-ui/icons/MovieOutlined';
 import LibraryMusicOutlinedIcon from '@material-ui/icons/LibraryMusicOutlined';
+import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
 
 import { Text } from './user/Text';
 import { Button } from './user/Button';
 import { Container } from './user/Container';
 import { Card } from './user/Card';
 import { Video } from './user/Video';
+import { FreeDrag } from './design/FreeDrag';
+import { useHistory } from 'react-router';
 
 const drawerWidth = 240;
 
@@ -119,6 +122,50 @@ export const MiniDrawer = () => {
     const [snackbarMessage, setSnackbarMessage] = useState();
     const [stateToLoad, setStateToLoad] = useState();
 
+    const saveTemplate = () => {
+        const json = query.serialize();
+        const identifier = lz.encodeBase64(lz.compress(json));
+        const user = JSON.parse(localStorage.getItem('user'));
+
+        fetch(`http://localhost:3000/templates`, {
+            method: "POST",
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json',
+                Accept: 'application/json'
+            },
+            body: JSON.stringify({
+                identifier: identifier,
+                user_id: user.id
+            })
+        }).then(res => res.json()).then(res => console.log(res)).then(setSnackbarMessage('Template saved!'))
+    }
+
+    const history = useHistory();
+    const createPage = () => {
+        actions.setOptions((options) => (options.enabled = false))
+        const json = query.serialize();
+        const compressedIdentifier = lz.encodeBase64(lz.compress(json));
+        const user = JSON.parse(localStorage.getItem('user'));
+        fetch(`http://localhost:3000/pages`, {
+            method: "POST",
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json',
+                Accept: 'application/json'
+            },
+            body: JSON.stringify({
+                identifier: compressedIdentifier,
+                user_id: user.id
+            })
+        })
+        .then(res => res.json())
+        .then(res => {
+            console.log(res)
+            history.push(`/pages/${res.id}`);
+        })
+    }
+
     return (
         <Box className={classes.root} px={1} py={1} mt={0} mb={3} bgcolor="#1B1B1B">
             <AppBar
@@ -147,22 +194,18 @@ export const MiniDrawer = () => {
                             size="small"
                             variant="outlined"
                             color="secondary"
-                            onClick={() => {
-                                const json = query.serialize();
-                                copy(lz.encodeBase64(lz.compress(json)));
-                                setSnackbarMessage("State copied to clipboard")
-                            }}
+                            onClick={saveTemplate}
                         >
-                            Copy current state
-                    </MaterialButton>
+                            Save
+          </MaterialButton>
                         <MaterialButton
                             className={classes.exportButton}
                             size="small"
                             variant="outlined"
                             color="secondary"
-                            onClick={() => setDialogOpen(true)}
+                            onClick={createPage}
                         >
-                            Load
+                            Export
                     </MaterialButton>
                     </Grid>
                     <Dialog
@@ -281,6 +324,15 @@ export const MiniDrawer = () => {
                             </Tooltip>
                         </ListItemIcon>
                         <ListItemText primary='Card' />
+                    </ListItem>
+                    <Divider />
+                    <ListItem button key='FreeDrag' ref={ref => connectors.create(ref, <FreeDrag />)}>
+                        <ListItemIcon>
+                            <Tooltip title="FreeDrag" placement="right">
+                                <DragIndicatorIcon />
+                            </Tooltip>
+                        </ListItemIcon>
+                        <ListItemText primary='FreeDrag' />
                     </ListItem>
                 </List>
             </Drawer>

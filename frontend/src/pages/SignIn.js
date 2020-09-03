@@ -80,13 +80,14 @@ export default function SignIn(props) {
                 password: password
             })
         })
-        .then(res => res.json())
-        .then(json => {
-            json["error"] ? 
-            alert('Invalid username and/or password.')
-            :
-            props.logIn(json["user"])
-        })
+            .then(res => res.json())
+            .then(json => {
+                json["error"] ? (
+                    alert('Invalid username and/or password.')
+                )   : (
+                    props.logIn(json)
+                )}
+            )
     }
 
     return (

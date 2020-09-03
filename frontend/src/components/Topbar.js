@@ -24,6 +24,25 @@ export const Topbar = () => {
 
     const classes = useStyles();
 
+    const saveTemplate = () => {
+        const json = query.serialize();
+        const identifier = lz.encodeBase64(lz.compress(json));
+        const user = sessionStorage.getItem('user');
+
+        fetch(`http://localhost:3000/templates`, {
+            method: "POST",
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json',
+                Accept: 'application/json'
+            },
+            body: JSON.stringify({
+                identifier: identifier,
+                user_id: user.id
+            })
+        }).then(res => res.json()).then(res => console.log(res))
+    }
+
     return (
         <Box px={1} py={1} mt={0} mb={3} bgcolor="#1B1B1B">
             <Grid container alignItems="center">
@@ -41,13 +60,9 @@ export const Topbar = () => {
                         size="small"
                         variant="outlined"
                         color="secondary"
-                        onClick={() => {
-                            const json = query.serialize();
-                            copy(lz.encodeBase64(lz.compress(json)));
-                            setSnackbarMessage("State copied to clipboard")
-                        }}
+                        onClick={() => saveTemplate()}
                     >
-                        Copy current state
+                        Save
           </MaterialButton>
                     <MaterialButton
                         className={classes.root}

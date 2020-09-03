@@ -1,38 +1,69 @@
-import React from 'react';
-import { Typography, Paper, Grid, Divider } from '@material-ui/core';
+import React, { useState, useEffect } from 'react';
+import {
+    Switch,
+    Route,
+    Redirect
+} from "react-router-dom";
+import { useHistory, useParams } from "react-router";
+import { Paper, Grid } from '@material-ui/core';
 import { Editor, Frame, Element } from "@craftjs/core";
-import { Toolbox } from '../components/Toolbox';
 import { SettingsPanel } from '../components/SettingsPanel';
 import { MiniDrawer } from '../components/MiniDrawer';
-import { Topbar } from '../components/Topbar';
 import { Container } from '../components/user/Container';
 import { Button } from '../components/user/Button';
 import { Card, CardTop, CardBottom } from '../components/user/Card';
 import { Text } from '../components/user/Text';
 import { Page } from '../components/user/Page';
 import { Video } from '../components/user/Video';
+import { FreeDrag } from '../components/design/FreeDrag';
+// import Backdrop from '../components/styled/StyledBackdrop';
 import Background from '../assets/gray-texture2.png';
+import lz from "lzutf8";
+import PageView from './PageView';
 // import './components/filters/FilmGrain.css';
 
+
+
 export default function Edit() {
+    // const [enabled, setEnabled] = useState(true);
+    const [json, setJson] = useState(null);
+    // const [viewPage, toggleViewPage] = useState(false);
+    // const [page, setPage] = useState('');
+    // const [pageId, setPageId] = useState(null);
+
+    const { id } = useParams();
+    useEffect(() => {
+        fetch(`http://localhost:3000/templates/${id}`, {
+            method: "GET",
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        })
+            .then(res => res.json())
+            .then(res => res["identifier"])
+            .then(result => lz.decompress(lz.decodeBase64(result)))
+            .then(result => setJson(result))
+    }, []);
+
+
+
+
+
     return (
-        <div style={{ margin: "0 auto", backgroundImage: "url(" + Background + ")", backgroundPosition: 'center', backgroundSize: 'auto', height: '100vh', backgroundRepeat: 'repeat' }}>
-            <Editor resolver={{ Page, Card, Button, Text, Container, CardTop, CardBottom, Video }}>
+        <div style={{ margin: "0 auto", backgroundImage: "url(" + Background + ")", backgroundSize: 'auto', backgroundRepeat: 'repeat' }}>
+            <Editor resolver={{ Page, Card, Button, Text, Container, CardTop, CardBottom, Video, FreeDrag }}>
                 <MiniDrawer />
                 <Grid container wrap='nowrap'>
                     <Grid item xs={2} md={3} width="100%">
                         {/* space filler */}
                     </Grid>
                     <Grid item xs>
-                        <Frame>
-                            <Element is={Container} minWidth="75vw" minHeight="85vh" marginTop='5vh' padding={40} background="#FFFFFF" canvas>
-                                <Card />
-                                <Text size="small" text="Hello world." />
-                                <Element is={Container} padding={10} background="#912f40" canvas>
-                                    <Text size="small" text="I'm inside a container." color='#FFFFFF' />
+                        {(json !== null) ? (
+                            <Frame json={json}>
+                                <Element is={Container} minWidth="75vw" minHeight="85vh" marginTop='5vh' padding={40} background="#FFFFFF" overflow="hidden" canvas>
                                 </Element>
-                            </Element>
-                        </Frame>
+                            </Frame>
+                        ) : null}
                     </Grid>
                     <Grid item xs={2} md={3}>
                         <Paper className='classes-root'>
@@ -43,5 +74,5 @@ export default function Edit() {
                 </Grid>
             </Editor>
         </div>
-    );
+    )
 };

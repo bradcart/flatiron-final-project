@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Chip, Grid, Typography, Button as MaterialButton } from "@material-ui/core";
+import { Box, Chip, Grid, Divider, Typography, Button as MaterialButton } from "@material-ui/core";
 import { useEditor } from "@craftjs/core";
 import { ThemeProvider } from "@material-ui/styles";
 import EditorTheme from './themes/EditorTheme';
@@ -25,7 +25,7 @@ export const SettingsPanel = () => {
 
     return selected ? (
         <ThemeProvider theme={EditorTheme}>
-            <Box bgcolor="rgba(0, 0, 0, 0.06)" mt={20} px={2} py={2}>
+            <Box bgcolor="rgba(0, 0, 0, 0.06)" mt={5} px={2} py={2}>
                 <Grid container direction="column" spacing={0}>
                     <Grid item>
                         <Box pb={2}>
@@ -34,6 +34,7 @@ export const SettingsPanel = () => {
                                 <Grid item><Chip size="small" color="default" label={selected.name} /></Grid>
                             </Grid>
                         </Box>
+                        <Divider />
                     </Grid>
                     {
                         selected.settings && React.createElement(selected.settings)

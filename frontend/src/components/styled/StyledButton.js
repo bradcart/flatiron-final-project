@@ -18,6 +18,6 @@ const useStyles = makeStyles(theme => ({
 export default function StyledButton(props) {
     const classes = useStyles();
     return(
-        <Button className={classes.button} type={props.type} onClick={props.onClick} fullWidth={(props.fullWidth || false)} size={props.size}>{props.label}</Button>
+        <Button className={classes.button} onClick={props.onClick} type={props.type} fullWidth={(props.fullWidth || false)} size={props.size}>{props.label}</Button>
     )
 }
