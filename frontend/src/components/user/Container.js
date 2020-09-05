@@ -1,25 +1,25 @@
-import React from "react";
-import { Paper, FormControl, FormLabel, Slider, ClickAwayListener } from "@material-ui/core";
+import React, { useState } from "react";
+import { Paper, Box, FormControl, FormLabel, FormControlLabel, Slider, Checkbox, ClickAwayListener } from "@material-ui/core";
 // import ColorPicker from "material-ui-color-picker";
 import { CirclePicker } from "react-color";
 import { useNode } from "@craftjs/core";
 
-export const Container = ({ background, padding = 0, margin, marginTop, overflow, width, minWidth, height, minHeight, alignItems, variant, children }) => {
+export const Container = ({ background, padding = 0, marginTop, overflow, width, minWidth, height, minHeight, alignItems, square, children }) => {
     const { connectors: { connect, drag } } = useNode();
     return (
-        <Paper ref={ref => connect(drag(ref))} style={{
-            flex: 'unset',
+
+        <Paper variant="outlined" className="container-paper" square={square} ref={ref => connect(drag(ref))} style={{
             background,
             padding: `${padding}px`,
-            margin: '5px 0',
+            margin: 0,
+            elevation: 0,
             marginTop,
             overflow,
             width,
             minWidth,
             height,
             minHeight,
-            alignItems,
-            variant
+            alignItems
         }}>
             {children}
         </Paper>
@@ -27,37 +27,63 @@ export const Container = ({ background, padding = 0, margin, marginTop, overflow
 }
 
 export const ContainerSettings = () => {
-    const { background, padding, actions: { setProp } } = useNode(node => ({
+    const { background, padding, width, height, square, actions: { setProp } } = useNode(node => ({
         background: node.data.props.background,
-        padding: node.data.props.padding
+        padding: node.data.props.padding,
+        width: node.data.props.width,
+        height: node.data.props.height,
+        square: node.data.props.square
     }));
+
+    const [checked, toggleChecked] = useState(true);
+    const handleChecked = () => {
+        toggleChecked(!checked);
+        setProp(props => props.square = checked)
+    }
+
     return (
         <div>
             <FormControl fullWidth={true} margin="normal" component="fieldset">
-                <FormLabel component="legend" style={{marginBottom: "10px"}}>Background</FormLabel>
+                <FormLabel component="legend" style={{ marginBottom: "10px" }}>Background</FormLabel>
                 <CirclePicker
                     color={background}
                     colors={["#f44336", "#e91e63", "#9c27b0", "#673ab7", "#3f51b5", "#2196f3", "#03a9f4", "#00bcd4", "#009688"]}
                     width="130px"
                     onChange={color => {
                         setProp(props => props.background = color.hex)
-                }} />
+                    }} />
                 {/* <ColorPicker color={background} onChange={color => setProp(props => props.background = color)} /> */}
             </FormControl>
             <FormControl fullWidth={true} margin="normal" component="fieldset">
                 <FormLabel component="legend">Padding</FormLabel>
                 <Slider value={padding} onChange={(_, value) => setProp(props => props.padding = value)} />
             </FormControl>
+            <FormControl fullWidth={true} margin="normal" component="fieldset">
+                <FormLabel component="legend">Width</FormLabel>
+                <Slider min={100} max={1920} value={width} onChange={(_, value) => setProp(props => props.width = value)} />
+            </FormControl>
+            <FormControl fullWidth={true} margin="normal" component="fieldset">
+                <FormLabel component="legend">Height</FormLabel>
+                <Slider min={100} max={540} value={height} onChange={(_, value) => setProp(props => props.height = value)} />
+            </FormControl>
+
+            <FormControlLabel
+                control={<Checkbox checked={checked} onChange={() => handleChecked()} name="checked" />}
+                label="Rounded"
+            />
+
         </div>
     )
-}
+};
+
 
 export const ContainerDefaultProps = {
     background: "#ffffff",
     padding: 3,
     margin: 0,
-    width: '100%',
-    height: '100px',
+    elevation: 0,
+    width: '5vw',
+    height: '10vh',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
 };

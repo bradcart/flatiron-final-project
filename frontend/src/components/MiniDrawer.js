@@ -12,6 +12,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import TextFieldsIcon from '@material-ui/icons/TextFields';
 import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
 import CropLandscapeIcon from '@material-ui/icons/CropLandscape';
+import CheckBoxOutlineBlankSharpIcon from '@material-ui/icons/CheckBoxOutlineBlankSharp';
 import ViewDayOutlinedIcon from '@material-ui/icons/ViewDayOutlined';
 import MovieOutlinedIcon from '@material-ui/icons/MovieOutlined';
 import LibraryMusicOutlinedIcon from '@material-ui/icons/LibraryMusicOutlined';
@@ -20,10 +21,12 @@ import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
 import { Text } from './user/Text';
 import { Button } from './user/Button';
 import { Container } from './user/Container';
+import { StyledBox } from './styled/StyledBox';
 import { Card } from './user/Card';
 import { Video } from './user/Video';
 import { FreeDrag } from './design/FreeDrag';
 import { useHistory } from 'react-router';
+import { useParams } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -122,21 +125,20 @@ export const MiniDrawer = () => {
     const [snackbarMessage, setSnackbarMessage] = useState();
     const [stateToLoad, setStateToLoad] = useState();
 
+    const { id } = useParams();
     const saveTemplate = () => {
         const json = query.serialize();
         const identifier = lz.encodeBase64(lz.compress(json));
-        const user = JSON.parse(localStorage.getItem('user'));
-
-        fetch(`http://localhost:3000/templates`, {
-            method: "POST",
+        // const user = JSON.parse(localStorage.getItem('user'));
+        fetch(`http://localhost:3000/templates/${id}`, {
+            method: "PATCH",
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json',
                 Accept: 'application/json'
             },
             body: JSON.stringify({
-                identifier: identifier,
-                user_id: user.id
+                identifier: identifier
             })
         }).then(res => res.json()).then(res => console.log(res)).then(setSnackbarMessage('Template saved!'))
     }
@@ -159,183 +161,197 @@ export const MiniDrawer = () => {
                 user_id: user.id
             })
         })
-        .then(res => res.json())
-        .then(res => {
-            console.log(res)
-            history.push(`/pages/${res.id}`);
-        })
+            .then(res => res.json())
+            .then(res => {
+                console.log(res)
+                history.push(`/pages/${res.id}`);
+            })
     }
 
     return (
-        <Box className={classes.root} px={1} py={1} mt={0} mb={3} bgcolor="#1B1B1B">
-            <AppBar
-                position="fixed"
-                style={{ backgroundColor: '#181818', color: '#F0F5F3' }}
-                className={clsx(classes.appBar, {
-                    [classes.appBarShift]: open,
-                })}
-            >
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        className={clsx(classes.menuButton, {
-                            [classes.hide]: open,
+        <Grid container>
+            <Grid item xs={12}>
+                <Box className={classes.root} px={1} py={1} mt={0} mb={6} bgcolor="#1B1B1B">
+                    <AppBar
+                        position="fixed"
+                        style={{ backgroundColor: '#181818', color: '#F0F5F3' }}
+                        className={clsx(classes.appBar, {
+                            [classes.appBarShift]: open,
                         })}
                     >
-                        <MenuIcon />
-                    </IconButton>
-                    <h3 style={{ color: '#F0F5F3', marginBottom: '19px' }}>BRAVURA.</h3>
-                    <Grid container justify='flex-end'>
-                        <MaterialButton
-                            className={classes.exportButton}
-                            size="small"
-                            variant="outlined"
-                            color="secondary"
-                            onClick={saveTemplate}
-                        >
-                            Save
-          </MaterialButton>
-                        <MaterialButton
-                            className={classes.exportButton}
-                            size="small"
-                            variant="outlined"
-                            color="secondary"
-                            onClick={createPage}
-                        >
-                            Export
-                    </MaterialButton>
-                    </Grid>
-                    <Dialog
-                        open={dialogOpen}
-                        onClose={() => setDialogOpen(false)}
-                        fullWidth
-                        maxWidth="md"
-                    >
-                        <DialogTitle id="alert-dialog-title">Load state</DialogTitle>
-                        <DialogContent>
-                            <TextField
-                                multiline
-                                fullWidth
-                                placeholder='Paste the contents that was copied from the "Copy Current State" button'
-                                size="small"
-                                value={stateToLoad}
-                                onChange={e => setStateToLoad(e.target.value)}
-                            />
-                        </DialogContent>
-                        <DialogActions>
-                            <MaterialButton onClick={() => setDialogOpen(false)} color="primary">
-                                Cancel
-                            </MaterialButton>
-                            <MaterialButton
-                                onClick={() => {
-                                    setDialogOpen(false);
-                                    const json = lz.decompress(lz.decodeBase64(stateToLoad));
-                                    actions.deserialize(json);
-                                    setSnackbarMessage("State loaded")
-                                }}
-                                color="primary"
-                                autoFocus
+                        <Toolbar>
+                            <IconButton
+                                color="inherit"
+                                aria-label="open drawer"
+                                onClick={handleDrawerOpen}
+                                edge="start"
+                                className={clsx(classes.menuButton, {
+                                    [classes.hide]: open,
+                                })}
                             >
-                                Load
+                                <MenuIcon />
+                            </IconButton>
+                            <h3 style={{ color: '#F0F5F3', marginBottom: '19px' }}>BRAVURA.</h3>
+                            <Grid container justify='flex-end'>
+                                <MaterialButton
+                                    className={classes.exportButton}
+                                    size="small"
+                                    variant="outlined"
+                                    color="secondary"
+                                    onClick={saveTemplate}
+                                >
+                                    Save
+          </MaterialButton>
+                                <MaterialButton
+                                    className={classes.exportButton}
+                                    size="small"
+                                    variant="outlined"
+                                    color="secondary"
+                                    onClick={createPage}
+                                >
+                                    Export
+                    </MaterialButton>
+                            </Grid>
+                            <Dialog
+                                open={dialogOpen}
+                                onClose={() => setDialogOpen(false)}
+                                fullWidth
+                                maxWidth="md"
+                            >
+                                <DialogTitle id="alert-dialog-title">Load state</DialogTitle>
+                                <DialogContent>
+                                    <TextField
+                                        multiline
+                                        fullWidth
+                                        placeholder='Paste the contents that was copied from the "Copy Current State" button'
+                                        size="small"
+                                        value={stateToLoad}
+                                        onChange={e => setStateToLoad(e.target.value)}
+                                    />
+                                </DialogContent>
+                                <DialogActions>
+                                    <MaterialButton onClick={() => setDialogOpen(false)} color="primary">
+                                        Cancel
                             </MaterialButton>
-                        </DialogActions>
-                    </Dialog>
-                    <Snackbar
-                        autoHideDuration={1000}
-                        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-                        open={!!snackbarMessage}
-                        onClose={() => setSnackbarMessage(null)}
-                        message={<span>{snackbarMessage}</span>}
-                    />
-                </Toolbar>
-            </AppBar>
-            <Drawer
-                variant="permanent"
-                className={clsx(classes.drawer, {
-                    [classes.drawerOpen]: open,
-                    [classes.drawerClose]: !open,
-                })}
-                classes={{
-                    paper: clsx({
+                                    <MaterialButton
+                                        onClick={() => {
+                                            setDialogOpen(false);
+                                            const json = lz.decompress(lz.decodeBase64(stateToLoad));
+                                            actions.deserialize(json);
+                                            setSnackbarMessage("State loaded")
+                                        }}
+                                        color="primary"
+                                        autoFocus
+                                    >
+                                        Load
+                            </MaterialButton>
+                                </DialogActions>
+                            </Dialog>
+                            <Snackbar
+                                autoHideDuration={1000}
+                                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                                open={!!snackbarMessage}
+                                onClose={() => setSnackbarMessage(null)}
+                                message={<span>{snackbarMessage}</span>}
+                            />
+                        </Toolbar>
+                    </AppBar>
+                </Box>
+            </Grid>
+            <Grid item xs={2}>
+                <Drawer
+                    variant="permanent"
+                    className={clsx(classes.drawer, {
                         [classes.drawerOpen]: open,
                         [classes.drawerClose]: !open,
-                    }),
-                }}
-            >
-                <div className={classes.toolbar}>
-                    <Typography style={{ color: '#f50057', margin: '0 auto' }}>DRAG TO ADD</Typography>
-                    <IconButton onClick={handleDrawerClose}>
-                        {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-                    </IconButton>
-                </div>
-                <Divider />
-                <List style={{ marginLeft: '5px' }}>
-                    <ListItem button key='Text' ref={ref => connectors.create(ref, <Text />)}>
-                        <ListItemIcon>
-                            <Tooltip title="Text" placement="right">
-                                <TextFieldsIcon />
-                            </Tooltip>
-                        </ListItemIcon>
-                        <ListItemText primary='Text' />
-                    </ListItem>
-                    <ListItem button key='Button' ref={ref => connectors.create(ref, <Button />)}>
-                        <ListItemIcon>
-                            <Tooltip title="Button" placement="right">
-                                <RadioButtonCheckedIcon />
-                            </Tooltip>
-                        </ListItemIcon>
-                        <ListItemText primary='Button' />
-                    </ListItem>
+                    })}
+                    classes={{
+                        paper: clsx({
+                            [classes.drawerOpen]: open,
+                            [classes.drawerClose]: !open,
+                        }),
+                    }}
+                >
+                    <div className={classes.toolbar}>
+                        <Typography style={{ color: '#f50057', margin: '0 auto' }}>DRAG TO ADD</Typography>
+                        <IconButton onClick={handleDrawerClose}>
+                            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                        </IconButton>
+                    </div>
                     <Divider />
-                    <ListItem button key='Video' ref={ref => connectors.create(ref, <Video />)}>
-                        <ListItemIcon>
-                            <Tooltip title="Video" placement="right">
-                                <MovieOutlinedIcon />
-                            </Tooltip>
-                        </ListItemIcon>
-                        <ListItemText primary='Video' />
-                    </ListItem>
-                    <ListItem button key='Song' ref={ref => connectors.create(ref, <Element is={Container} padding={20} canvas />)}>
-                        <ListItemIcon>
-                            <Tooltip title="Song" placement="right">
-                                <LibraryMusicOutlinedIcon />
-                            </Tooltip>
-                        </ListItemIcon>
-                        <ListItemText primary='Song' />
-                    </ListItem>
-                </List>
-                <Divider />
-                <List style={{ marginLeft: '5px' }}>
-                    <ListItem button key='Container' ref={ref => connectors.create(ref, <Element is={Container} padding={20} canvas />)}>
-                        <ListItemIcon>
-                            <Tooltip title="Container" placement="right">
-                                <CropLandscapeIcon />
-                            </Tooltip>
-                        </ListItemIcon>
-                        <ListItemText primary='Container' />
-                    </ListItem>
-                    <ListItem button key='Card' ref={ref => connectors.create(ref, <Card />)}>
-                        <ListItemIcon>
-                            <Tooltip title="Card" placement="right">
-                                <ViewDayOutlinedIcon />
-                            </Tooltip>
-                        </ListItemIcon>
-                        <ListItemText primary='Card' />
-                    </ListItem>
+                    <List style={{ marginLeft: '5px' }}>
+                        <ListItem button key='Text' ref={ref => connectors.create(ref, <Text />)}>
+                            <ListItemIcon>
+                                <Tooltip title="Text" placement="right">
+                                    <TextFieldsIcon />
+                                </Tooltip>
+                            </ListItemIcon>
+                            <ListItemText primary='Text' />
+                        </ListItem>
+                        <ListItem button key='Button' ref={ref => connectors.create(ref, <Button />)}>
+                            <ListItemIcon>
+                                <Tooltip title="Button" placement="right">
+                                    <RadioButtonCheckedIcon />
+                                </Tooltip>
+                            </ListItemIcon>
+                            <ListItemText primary='Button' />
+                        </ListItem>
+                        <Divider />
+                        <ListItem button key='Video' ref={ref => connectors.create(ref, <Video />)}>
+                            <ListItemIcon>
+                                <Tooltip title="Video" placement="right">
+                                    <MovieOutlinedIcon />
+                                </Tooltip>
+                            </ListItemIcon>
+                            <ListItemText primary='Video' />
+                        </ListItem>
+                        <ListItem button key='Song' ref={ref => connectors.create(ref, <Element is={Container} padding={20} canvas />)}>
+                            <ListItemIcon>
+                                <Tooltip title="Song" placement="right">
+                                    <LibraryMusicOutlinedIcon />
+                                </Tooltip>
+                            </ListItemIcon>
+                            <ListItemText primary='Song' />
+                        </ListItem>
+                    </List>
                     <Divider />
-                    <ListItem button key='FreeDrag' ref={ref => connectors.create(ref, <FreeDrag />)}>
-                        <ListItemIcon>
-                            <Tooltip title="FreeDrag" placement="right">
-                                <DragIndicatorIcon />
-                            </Tooltip>
-                        </ListItemIcon>
-                        <ListItemText primary='FreeDrag' />
-                    </ListItem>
-                </List>
-            </Drawer>
-        </Box>
+                    <List style={{ marginLeft: '5px' }}>
+                        <ListItem button key='Container' ref={ref => connectors.create(ref, <Element is={Container} padding={20} canvas />)}>
+                            <ListItemIcon>
+                                <Tooltip title="Container" placement="right">
+                                    <CropLandscapeIcon />
+                                </Tooltip>
+                            </ListItemIcon>
+                            <ListItemText primary='Container' />
+                        </ListItem>
+                        <ListItem button key='Box' ref={ref => connectors.create(ref, <Element is={StyledBox} canvas />)}>
+                            <ListItemIcon>
+                                <Tooltip title="Box" placement="right">
+                                    <CheckBoxOutlineBlankSharpIcon />
+                                </Tooltip>
+                            </ListItemIcon>
+                            <ListItemText primary='Box' />
+                        </ListItem>
+                        <ListItem button key='Card' ref={ref => connectors.create(ref, <Card />)}>
+                            <ListItemIcon>
+                                <Tooltip title="Card" placement="right">
+                                    <ViewDayOutlinedIcon />
+                                </Tooltip>
+                            </ListItemIcon>
+                            <ListItemText primary='Card' />
+                        </ListItem>
+                        <Divider />
+                        <ListItem button key='FreeDrag' ref={ref => connectors.create(ref, <FreeDrag />)}>
+                            <ListItemIcon>
+                                <Tooltip title="FreeDrag" placement="right">
+                                    <DragIndicatorIcon />
+                                </Tooltip>
+                            </ListItemIcon>
+                            <ListItemText primary='FreeDrag' />
+                        </ListItem>
+                    </List>
+                </Drawer>
+            </Grid>
+        </Grid>
     );
 }

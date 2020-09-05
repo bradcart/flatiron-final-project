@@ -50,12 +50,13 @@ const App = () => {
 
   return (
     <Switch>
+      <Route path='/pages/:id' component={PageView} />
       <Route path='/templates/:id/edit' component={Edit} />
-      <Route path="/templates" component={LoadTemplate} />
-      <Route path={`/pages/:id`} component={PageView} />
+      <Route path='/templates' component={LoadTemplate} />
+      
 
       <Route exact path="/">
-        {loggedIn ? <Redirect to="/templates" /> : null}
+        {loggedIn ? <Redirect to='/templates' /> : null}
         <BackgroundVideo />
         <Box display="flex" height='100vh' alignItems="center" justifyContent="center">
           {buttons ?

@@ -8,7 +8,7 @@ import { Divider } from "@material-ui/core";
 export const CardTop = ({ children }) => {
     const { connectors: { connect } } = useNode();
     return (
-        <div ref={connect} className="text-only">
+        <div ref={connect} className="text-only" style={{minHeight: '20px'}}>
             {children}
         </div>
     )
@@ -37,14 +37,14 @@ CardBottom.craft = {
     }
 }
 
-export const Card = ({ background, padding = 20 }) => {
+export const Card = ({ background, padding = 20, width, minHeight }) => {
     return (
-        <Container background={background} padding={padding}>
+        <Container background={background} padding={padding} width={width}>
             <Element id="text" is={CardTop} canvas>
                 <Text text="Title." fontSize={24} font='h6' />
             </Element>
             <Divider />
-            <Element id="body" is='div' canvas>
+            <Element id="body" is='div' canvas style={{minHeight}}>
                 <Text text="Body." fontSize={18} />
             </Element>
             <Divider />
@@ -59,13 +59,14 @@ const CardDefaultProps = {
     background: "#ffffff",
     padding: 10,
     margin: 0,
-    width: '30%',
-    height: '50px',
+    width: '22.5vw',
+    minHeight: '130px',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
 };
 
 Card.craft = {
+    displayName: "Card",
     props: CardDefaultProps,
     related: {
         settings: ContainerSettings

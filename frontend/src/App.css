@@ -1,5 +1,6 @@
 html {
     background-color: rgb(85, 85, 85);
+    overflow: hidden;
     /* background-image: url('./assets/sonder\ pop\ up.jpg'); */
 }
 

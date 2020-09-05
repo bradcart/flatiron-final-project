@@ -55,6 +55,7 @@ const ButtonSettings = () => {
 }
 
 Button.craft = {
+    displayName: "Button",
     props: {
         size: "small",
         variant: "contained",

@@ -86,6 +86,7 @@ const TextSettings = () => {
 
 
 Text.craft = {
+    displayName: "Text",
     props: {
         text: "Enter text here...",
         fontSize: 20,

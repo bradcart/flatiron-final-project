@@ -24,6 +24,7 @@
     "react-draggable": "^4.4.3",
     "react-flip-move": "^3.0.4",
     "react-images-upload": "^1.2.8",
+    "react-player": "^2.6.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
     "react-soundplayer": "^1.0.5",

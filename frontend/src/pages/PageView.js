@@ -8,10 +8,12 @@ import { Card, CardTop, CardBottom } from '../components/user/Card';
 import { Text } from '../components/user/Text';
 import { Video } from '../components/user/Video';
 import { FreeDrag } from '../components/design/FreeDrag';
+import { StyledBox } from '../components/styled/StyledBox';
 // import Backdrop from '../components/styled/StyledBackdrop';
 import Background from '../assets/gray-texture2.png';
 import lz from "lzutf8";
 // import './components/filters/FilmGrain.css';
+import './PageView.css';
 
 export default function PageView() {
     const [json, setJson] = useState(null);
@@ -31,10 +33,16 @@ export default function PageView() {
     }, []);
 
     return (
-        <Editor enabled={false} resolver={{ Card, Button, Text, Container, CardTop, CardBottom, Video, FreeDrag }}>
-            {(json !== null) ? (
-                <Frame json={json} />
-            ) : null}
-        </Editor>
+        <div className="translate-container">
+            <div className="scale-container">
+                <Editor enabled={false} resolver={{ Card, Button, Text, Container, CardTop, CardBottom, Video, FreeDrag, StyledBox }}>
+                    {(json !== null) ? (
+                        <Frame json={json}>
+                            <Element className='overflow-container' is={Container} minWidth='80vw' minHeight='80vh' padding='0' background="#FFFFFF" canvas>
+                            </Element>
+                        </Frame>) : null}
+                </Editor>
+            </div>
+        </div>
     )
 };

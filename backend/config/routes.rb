@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   get "/auto_login", to: "users#auto_login"
   get "/users", to: "users#index"
   get "/templates/:id", to: "templates#show"
+  patch "/templates/:id", to: "templates#update"
   post "/templates", to: "templates#create"
   post "/pages", to: "pages#create"
   get "/pages/:id", to: "pages#show"
