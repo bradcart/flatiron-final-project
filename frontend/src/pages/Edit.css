@@ -1,11 +1,14 @@
-.container-paper {
-  min-height: 100vh;
-  min-width: 100vh;
-  overflow-y: auto;
-}
-
 .frame-container {
   display: flex;
   flex-direction: row;
   background-attachment: fixed;
+  /* transform: scale(0.75); */
+}
+
+.container-paper {
+  margin-top: 9vh;
+  min-height: 90vh;
+  min-width: 85vw;
+  overflow-y: auto;
+  overflow-x: hidden;
 }

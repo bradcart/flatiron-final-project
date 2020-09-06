@@ -4,7 +4,7 @@ import { Editor, Frame, Element } from "@craftjs/core";
 import { Toolbox } from '../components/Toolbox';
 import { SettingsPanel } from '../components/SettingsPanel';
 import { MiniDrawer } from '../components/MiniDrawer';
-import { Topbar } from '../components/Topbar';
+import { Topbar } from './Topbar';
 import { Container } from '../components/user/Container';
 import { Button } from '../components/user/Button';
 import { Card, CardTop, CardBottom } from '../components/user/Card';

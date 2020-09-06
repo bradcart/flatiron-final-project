@@ -1,0 +1,59 @@
+{
+    "ROOT": {
+        "type": {
+            "resolvedName": "Container"
+        },
+        "isCanvas": true,
+        "props": {
+            "background": "#FFFFFF",
+            "padding": "0",
+            "width": "5vw",
+            "height": "10vh",
+            "alignItems": "flex-start",
+            "justifyContent": "flex-start",
+            "minWidth": "80vw",
+            "minHeight": "80vh",
+            "marginTop": "10vh"
+        },
+        "displayName": "Container",
+        "custom": {},
+        "hidden": false,
+        "nodes": [
+            "wzdqGMRLu",
+            "6pJqezX1p"
+        ]
+    },
+    "6pJqezX1p": {
+        "type": {
+            "resolvedName": "StyledBox"
+        },
+        "isCanvas": true,
+        "props": {
+            "background": "#666666",
+            "width": "100px",
+            "height": "100px"
+        },
+        "displayName": "Box",
+        "custom": {},
+        "hidden": false,
+        "parent": "ROOT",
+        "nodes": []
+    },
+    "wzdqGMRLu": {
+        "type": {
+            "resolvedName": "GridRow"
+        },
+        "isCanvas": true,
+        "props": {
+            "background": "#ffffff",
+            "width": 1,
+            "height": "100px",
+            "border": 1,
+            "padding": 20
+        },
+        "displayName": "Row",
+        "custom": {},
+        "hidden": false,
+        "parent": "ROOT"
+    }
+}

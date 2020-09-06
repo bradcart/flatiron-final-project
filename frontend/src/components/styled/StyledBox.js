@@ -1,7 +1,6 @@
 import React from 'react';
 import { Box, FormControl, FormLabel, Slider } from '@material-ui/core';
 import { CirclePicker } from "react-color";
-import { sizing, display, borders, flexbox } from '@material-ui/system';
 import { useNode } from '@craftjs/core';
 
 // border = 1 or 0;
@@ -22,14 +21,14 @@ export const StyledBox = ({
         <Box
             ref={ref => connect(drag(ref))}
             display="inline-flex"
+            flexWrap="wrap"
             boxSizing="border-box"
             width={width}
             height={height}
             border={border}
             borderColor={borderColor}
             borderRadius={borderRadius}
-            whiteSpace="normal"
-            style={{ background }}
+            style={{ background, overflowWrap: 'break-word' }}
         >
             {children}
         </Box>
@@ -38,7 +37,7 @@ export const StyledBox = ({
 };
 
 const StyledBoxSettings = () => {
-    const { background, padding, width, height, name, actions: { setProp } } = useNode(node => ({
+    const { background, padding, width, height, actions: { setProp } } = useNode(node => ({
         background: node.data.props.background,
         width: node.data.props.width,
         height: node.data.props.height,

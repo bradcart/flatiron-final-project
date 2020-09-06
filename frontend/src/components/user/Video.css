@@ -1,0 +1,13 @@
+/* .dot {
+    height: 5px;
+    width: 5px;
+    background-color: black;
+    border-radius: 50%;
+    display: inline-block;
+} */
+
+.edit-video-icon {
+    position: relative;
+    left: 27vw;
+    top: 5.2vh;
+}

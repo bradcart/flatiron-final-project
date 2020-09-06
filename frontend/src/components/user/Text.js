@@ -29,7 +29,7 @@ export const Text = ({ text, font, fontSize, textAlign, color }) => {
             <ContentEditable
                 disabled={!enabled}
                 html={text}
-                onChange={e => setProp(props => props.text = e.target.value.replace(/<\/?[^>]+(>|$)/g, ""))}
+                onChange={e => setProp(props => props.text = e.target.value)}
                 tagName={font}
                 style={{ color, fontSize: `${fontSize}px`, textAlign, width: `100%` }}
             />
@@ -89,7 +89,7 @@ Text.craft = {
     displayName: "Text",
     props: {
         text: "Enter text here...",
-        fontSize: 20,
+        fontSize: 16,
         font: 'p'
     },
     rules: {

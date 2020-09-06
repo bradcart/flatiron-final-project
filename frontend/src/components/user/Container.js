@@ -4,13 +4,13 @@ import { Paper, Box, FormControl, FormLabel, FormControlLabel, Slider, Checkbox,
 import { CirclePicker } from "react-color";
 import { useNode } from "@craftjs/core";
 
-export const Container = ({ background, padding = 0, marginTop, overflow, width, minWidth, height, minHeight, alignItems, square, children }) => {
+export const Container = ({ background, padding, marginTop, overflow, width, minWidth, height, minHeight, alignItems, square, children }) => {
     const { connectors: { connect, drag } } = useNode();
     return (
 
         <Paper variant="outlined" className="container-paper" square={square} ref={ref => connect(drag(ref))} style={{
             background,
-            padding: `${padding}px`,
+            padding,
             margin: 0,
             elevation: 0,
             marginTop,
@@ -79,11 +79,11 @@ export const ContainerSettings = () => {
 
 export const ContainerDefaultProps = {
     background: "#ffffff",
-    padding: 3,
+    padding: 0,
     margin: 0,
     elevation: 0,
-    width: '5vw',
-    height: '10vh',
+    width: '80vw',
+    height: '80vh',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
 };

@@ -11,16 +11,19 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import TextFieldsIcon from '@material-ui/icons/TextFields';
 import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
-import CropLandscapeIcon from '@material-ui/icons/CropLandscape';
+import Crop169Icon from '@material-ui/icons/Crop169';
+import Crop75Icon from '@material-ui/icons/Crop75';
 import CheckBoxOutlineBlankSharpIcon from '@material-ui/icons/CheckBoxOutlineBlankSharp';
 import ViewDayOutlinedIcon from '@material-ui/icons/ViewDayOutlined';
 import MovieOutlinedIcon from '@material-ui/icons/MovieOutlined';
 import LibraryMusicOutlinedIcon from '@material-ui/icons/LibraryMusicOutlined';
 import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
 
+
 import { Text } from './user/Text';
 import { Button } from './user/Button';
-import { Container } from './user/Container';
+import { GridRow } from './layout/GridRow';
+import { GridCell } from './layout/GridCell';
 import { StyledBox } from './styled/StyledBox';
 import { Card } from './user/Card';
 import { Video } from './user/Video';
@@ -305,7 +308,7 @@ export const MiniDrawer = () => {
                             </ListItemIcon>
                             <ListItemText primary='Video' />
                         </ListItem>
-                        <ListItem button key='Song' ref={ref => connectors.create(ref, <Element is={Container} padding={20} canvas />)}>
+                        <ListItem button key='Song' ref={ref => connectors.create(ref, <Video />)}>
                             <ListItemIcon>
                                 <Tooltip title="Song" placement="right">
                                     <LibraryMusicOutlinedIcon />
@@ -313,17 +316,24 @@ export const MiniDrawer = () => {
                             </ListItemIcon>
                             <ListItemText primary='Song' />
                         </ListItem>
-                    </List>
-                    <Divider />
-                    <List style={{ marginLeft: '5px' }}>
-                        <ListItem button key='Container' ref={ref => connectors.create(ref, <Element is={Container} padding={20} canvas />)}>
+                        <Divider />
+                        <ListItem button key='Row' ref={ref => connectors.create(ref, <Element is={GridRow} canvas />)}>
                             <ListItemIcon>
-                                <Tooltip title="Container" placement="right">
-                                    <CropLandscapeIcon />
+                                <Tooltip title="Row" placement="right">
+                                    <Crop169Icon />
                                 </Tooltip>
                             </ListItemIcon>
-                            <ListItemText primary='Container' />
+                            <ListItemText primary='Row' />
                         </ListItem>
+                        <ListItem button key='Cell' ref={ref => connectors.create(ref, <Element is={GridCell} canvas />)}>
+                            <ListItemIcon>
+                                <Tooltip title="Cell" placement="right">
+                                    <Crop75Icon />
+                                </Tooltip>
+                            </ListItemIcon>
+                            <ListItemText primary='Cell' />
+                        </ListItem>
+                        <Divider />
                         <ListItem button key='Box' ref={ref => connectors.create(ref, <Element is={StyledBox} canvas />)}>
                             <ListItemIcon>
                                 <Tooltip title="Box" placement="right">
@@ -352,6 +362,6 @@ export const MiniDrawer = () => {
                     </List>
                 </Drawer>
             </Grid>
-        </Grid>
+        </Grid >
     );
 }

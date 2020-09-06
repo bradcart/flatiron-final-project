@@ -17,6 +17,8 @@ import { Page } from '../components/user/Page';
 import { Video } from '../components/user/Video';
 import { FreeDrag } from '../components/design/FreeDrag';
 import { StyledBox } from '../components/styled/StyledBox';
+import { GridRow } from '../components/layout/GridRow';
+import { GridCell } from '../components/layout/GridCell';
 // import Backdrop from '../components/styled/StyledBackdrop';
 import Background from '../assets/gray-texture2.png';
 import lz from "lzutf8";
@@ -30,9 +32,9 @@ export default function Edit() {
     // const [viewPage, toggleViewPage] = useState(false);
     // const [page, setPage] = useState('');
     // const [pageId, setPageId] = useState(null);
-    const [xHeight, setXHeight] = useState('100vh');
-    const [xWidth, setXWidth] = useState('75vw');
-    const [xProps, setXProps] = useState(false);
+    // const [xHeight, setXHeight] = useState('100vh');
+    // const [xWidth, setXWidth] = useState('75vw');
+    // const [xProps, setXProps] = useState(false);
 
     const { id } = useParams();
     useEffect(() => {
@@ -48,10 +50,10 @@ export default function Edit() {
             .then(result => setJson(result))
     }, []);
 
-    const handleExport = () => {
-        setXHeight('100vh');
-        setXWidth('100vw');
-    }
+    // const handleExport = () => {
+    //     setXHeight('100vh');
+    //     setXWidth('100vw');
+    // }
 
     // const scaleToPage = (el) => {
     //     return (
@@ -63,23 +65,55 @@ export default function Edit() {
 
     return (
         <div style={{ margin: "0 auto", overflowX: 'hidden', minHeight: '100vh', backgroundImage: "url(" + Background + ")", backgroundSize: 'auto', backgroundRepeat: 'repeat' }}>
-            <Editor resolver={{ Card, Button, Text, Container, CardTop, CardBottom, Video, FreeDrag, StyledBox }}>
-                <Grid className='resize-container' container wrap='nowrap'>
+            <Editor resolver={{ Card, Button, Text, Container, CardTop, CardBottom, Video, FreeDrag, StyledBox, GridRow, GridCell }}>
+                <Grid container wrap='nowrap'>
                     <Grid item xs={2}>
                         <MiniDrawer />
                     </Grid>
                     <Grid item xs>
                         {(json !== null) ? (
                             <Grid className='frame-container' container>
-                                <Frame json={json}>
-                                    <Element is={Container} className='scroll-container' minWidth='80vw' minHeight='80vh' padding='0' background="#FFFFFF" canvas>
+                                <Frame>
+                                    <Element is={Container} className="container-paper" canvas>
+                                        <Element is={GridRow} width={12} canvas>
+                                            <Element is={GridCell} width={4} canvas>
+                                            
+                                            </Element>
+                                            <Element is={GridCell} width={4} canvas>
+                                            
+                                            </Element>
+                                            <Element is={GridCell} width={4} canvas>
+                                            
+                                            </Element>
+                                        </Element>
+                                        <Element is={GridRow} width={12} canvas>
+
+                                        </Element>
+                                        <Element is={GridRow} width={12} canvas>
+
+                                        </Element>
+                                        <Element is={GridRow} width={12} canvas>
+
+                                        </Element>
+                                        <Element is={GridRow} width={12} canvas>
+
+                                        </Element>
+                                        <Element is={GridRow} width={12} canvas>
+
+                                        </Element>
+                                        <Element is={GridRow} width={12} canvas>
+
+                                        </Element>
+                                        <Element is={GridRow} width={12} canvas>
+
+                                        </Element>
                                     </Element>
                                 </Frame>
                             </Grid>
                         ) : null}
                     </Grid>
                     <Grid item xs={2}>
-                        <Paper style={{ marginLeft: '20px' }}>
+                        <Paper>
                             {/* <Toolbox /> */}
                             <SettingsPanel />
                         </Paper>
