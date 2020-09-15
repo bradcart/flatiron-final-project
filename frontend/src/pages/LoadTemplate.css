@@ -3,6 +3,80 @@
     height: 100vh;
     width: auto;
     overflow: hidden;
+    position: relative;
+}
+
+.center {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.btn {
+    border: none;
+    background-color: #070707;
+    padding: 0px 20px;
+    font-size: 16px;
+    height: 25%;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.btn:focus,.btn:active {
+    outline: none !important;
+    box-shadow: none;
+}
+
+
+.text {
+    color: rgba(240, 245, 243, 0.6); 
+    font-family: 'raleway';
+    transition: 0.4s;
+    cursor: pointer;
+}
+
+.text:hover {
+    color:#FFF;
+}
+
+.nothing-header {
+    color: rgb(240, 245, 243);
+    font-family: 'Arimo';
+    font-variant: small-caps;
+}
+
+.nothing-paragraph {
+    color: rgb(240, 245, 243);
+    font-family: 'raleway';
+}
+
+.list {
+    color: rgba(240, 245, 243, 0.6); 
+    font-size: 42px;
+    font-family: 'raleway';
+    transition: 0.4s;
+    cursor: pointer;
+    
+}
+
+.list:hover {
+    color:#FFF;
+}
+
+.list-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.log-out {
+    position: absolute;
+    width: 50%;
+    font-size: 15px;
+    margin: 16px 0 0 0;
+    left: 1.2vw;
 }
 
 .headline {
@@ -20,6 +94,7 @@
     left: 50vw;
     transform: translateX(-50%);
     width: 15%;
+    bottom: 300px;
 }
 
 .container {

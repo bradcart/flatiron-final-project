@@ -4,6 +4,7 @@ import { Button } from "./Button";
 import { Container, ContainerSettings, ContainerDefaultProps } from "./Container";
 import { useNode, Element } from "@craftjs/core";
 import { Divider } from "@material-ui/core";
+import { StyledBoxSettings } from "../styled/StyledBox";
 
 export const CardTop = ({ children }) => {
     const { connectors: { connect } } = useNode();
@@ -69,6 +70,6 @@ Card.craft = {
     displayName: "Card",
     props: CardDefaultProps,
     related: {
-        settings: ContainerSettings
+        settings: StyledBoxSettings
     }
 }

@@ -1,11 +1,5 @@
 import React, { useState } from 'react';
-import Edit from './Edit';
-import {
-    Switch,
-    Route,
-    Redirect,
-    useHistory
-} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext, Image } from 'pure-react-carousel';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
@@ -14,16 +8,17 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import { useArrowWhiteButtonStyles } from '@mui-treasury/styles/button/arrowWhite';
 import { usePushingGutterStyles } from '@mui-treasury/styles/gutter/pushing';
 // import { useSoftRiseShadowStyles } from '@mui-treasury/styles/shadow/softRise';
-import SonderInto from '../assets/sonder-into.jpg';
-import SonderPopup from '../assets/sonder-popup.jpg';
-import Brent from '../assets/brent.jpg';
 import StyledButton from '../components/styled/StyledButton';
 import 'pure-react-carousel/dist/react-carousel.es.css';
 import './LoadTemplate.css';
 import '../components/filters/FilmGrain.css';
+import PhotoPage from '../assets/templates/PhotoPage.png';
+import ProductPage from '../assets/templates/ProductPage.png';
+import NewTemplate from '../assets/templates/NewTemplate.png';
 
 export default function LoadTemplate() {
     const history = useHistory();
+    const user = (JSON.parse(localStorage.getItem('user')))['username']
     const classes = useArrowWhiteButtonStyles();
     const gutterStyles = usePushingGutterStyles({
         firstExcluded: true,
@@ -45,7 +40,7 @@ export default function LoadTemplate() {
     };
 
     const renderTemplate = () => {
-        history.push(`/templates/${id}/edit`);
+        history.push(`/${user}/templates/${id}/edit`);
         setId(1);
     };
     console.log(id)
@@ -57,8 +52,8 @@ export default function LoadTemplate() {
                     visibleSlides={1}
                     totalSlides={3}
                     step={1}
-                    naturalSlideWidth={430}
-                    naturalSlideHeight={515}
+                    naturalSlideWidth={2047}
+                    naturalSlideHeight={1064}
                     hasMasterSpinner
                 >
                     <h2
@@ -66,12 +61,12 @@ export default function LoadTemplate() {
                         style={{ fontFamily: 'raleway', fontSize: 44, color: '#F0F5F3', letterSpacing: '2.5px', fontVariant: 'small-caps' }}>
                         template {id}
                     </h2>
-                    <Box className={gutterStyles.parent} >
-                        <Box className='container'>
+                    <Box className={gutterStyles.parent}  >
+                        <Box className='container' style={{ marginTop: '300px' }}>
                             <Slider id='content' className='slider'>
-                                <Slide index={0} onFocus={() => setId(1)}><Image src={SonderInto} hasMasterSpinner /></Slide>
-                                <Slide index={1} onFocus={() => setId(2)}><Image src={SonderPopup} hasMasterSpinner /></Slide>
-                                <Slide index={2} onFocus={() => setId(3)}><Image src={Brent} hasMasterSpinner /></Slide>
+                                <Slide index={0} onFocus={() => setId(1)}><Image src={NewTemplate} hasMasterSpinner /></Slide>
+                                <Slide index={1} onFocus={() => setId(2)}><Image src={PhotoPage} hasMasterSpinner /></Slide>
+                                <Slide index={2} onFocus={() => setId(3)}><Image src={ProductPage} hasMasterSpinner /></Slide>
                             </Slider>
                         </Box>
                         <ButtonBack className='buttonBack' onClick={handleLeftArrow}>

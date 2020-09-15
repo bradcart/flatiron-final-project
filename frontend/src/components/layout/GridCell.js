@@ -2,26 +2,25 @@ import React, { useState } from 'react';
 import { Grid, Box, FormControl, FormControlLabel, FormLabel, Slider, Checkbox, Divider } from '@material-ui/core';
 import { CirclePicker } from 'react-color';
 import { useNode, Element } from '@craftjs/core';
-import { StyledBox } from '../styled/StyledBox';
 
 export const GridCell = ({ children, background, width, height, border }) => {
     const { connectors: { connect, drag } } = useNode();
     return (
         <Grid item xs={width}>
-            <Box ref={ref => connect(drag(ref))}
-                display="flex"
-                flexDirection="column"
-                flexWrap="nowrap"
+            <Element is={Box} id="drop" ref={ref => connect(drag(ref))}
+                display="inline-flex"
+                flexDirection="row"
+                flexWrap="wrap"
                 justifyContent="flex-start"
                 alignItems="center"
                 bgcolor={background}
                 width="auto"
                 height="auto"
                 minHeight={height}
-                borderRight={border}
-                borderLeft={border}>
+                border={border}
+                canvas>
                 {children}
-            </Box>
+            </Element>
         </Grid>
     )
 };
@@ -81,8 +80,8 @@ const GridCellSettings = () => {
 const GridCellDefaultProps = {
     background: "#ffffff",
     width: 4,
-    height: '75.9px',
-    border: 1
+    height: '125px',
+    border: '1px solid red'
 };
 
 GridCell.craft = {

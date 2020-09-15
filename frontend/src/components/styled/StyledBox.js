@@ -1,7 +1,9 @@
-import React from 'react';
-import { Box, FormControl, FormLabel, Slider } from '@material-ui/core';
+import React, { useState } from 'react';
+import { Box, FormControl, FormControlLabel, Button, ButtonGroup, Checkbox, Slider, Typography, Divider, IconButton } from '@material-ui/core';
 import { CirclePicker } from "react-color";
 import { useNode } from '@craftjs/core';
+import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 
 // border = 1 or 0;
 // borderColor = primary.main, secondary.main, etc;
@@ -12,17 +14,30 @@ export const StyledBox = ({
     background,
     width,
     height,
+    right,
+    left,
+    top,
+    bottom,
     border,
     borderColor,
     borderRadius,
+    justifyContent,
+    alignItems
 }) => {
     const { connectors: { connect, drag } } = useNode();
     return (
         <Box
             ref={ref => connect(drag(ref))}
             display="inline-flex"
+            position="fixed"
+            right={right}
+            left={left}
+            top={top}
+            bottom={bottom}
             flexWrap="wrap"
             boxSizing="border-box"
+            justifyContent={justifyContent}
+            alignItems={alignItems}
             width={width}
             height={height}
             border={border}
@@ -36,47 +51,149 @@ export const StyledBox = ({
     )
 };
 
-const StyledBoxSettings = () => {
-    const { background, padding, width, height, actions: { setProp } } = useNode(node => ({
+export const StyledBoxSettings = () => {
+    const { background, width, height, right, left, top, bottom, border, borderColor, actions: { setProp } } = useNode(node => ({
         background: node.data.props.background,
         width: node.data.props.width,
         height: node.data.props.height,
-        border: node.data.props.border,
         borderRadius: node.data.props.borderRadius,
-        borderColor: node.data.props.borderColor
-    }));
+        border: node.data.props.border,
+        borderColor: node.data.props.borderColor,
+        justifyContent: node.data.props.justifyContent,
+        alignItems: node.data.props.alignItems,
+        right: node.data.props.right,
+        left: node.data.props.left,
+        top: node.data.props.top,
+        bottom: node.data.props.bottom
+    }))
 
-    // const [checked, toggleChecked] = useState(true);
-    // const handleChecked = () => {
-    //     toggleChecked(!checked);
-    //     setProp(props => props.square = checked)
-    // }
+    const [checked, toggleChecked] = useState(false);
+    const [rounded, toggleRounded] = useState(false);
+
+    const handleChecked = () => {
+        if (checked === true) {
+            toggleChecked(false)
+            setProp(props => props.border = 0)
+        } else {
+            toggleChecked(true)
+            setProp(props => props.border = 1)
+        }
+    };
+
+    const handleRounded = () => {
+        if (rounded === true) {
+            toggleRounded(false)
+            setProp(props => props.borderRadius = '0')
+        } else {
+            toggleRounded(true)
+            setProp(props => props.borderRadius = '50%')
+        }
+    };
+
+    const handleJustify = (string) => {
+        setProp(props => props.justifyContent = string)
+    };
+
+    const handleAlign = (string) => {
+        setProp(props => props.alignItems = string)
+    };
+
+    const colors = ["#76323F", "#a30003", "#e81d24", "#F17A7E", "#687864", "#008c58", "#005a23", "#5CDB95", "#efa202", "#ffc044", "#ffeb00", "#f54c2d", "#301934", "#032053", "#0f0bde", "#db0081"];
+    const neutrals = ["#FFFFFF", "#EFEFEF", "#E3E2DF", "#F0F5F3", "#E8DFE0", "#eee9dd", "#D8CFD0", "#413F3D", "#212121", "#1b1b1b", "#141414", "#000000"];
+
+    const [colorSection, setColorSection] = useState("COLORS");
+    const [colorPalette, setColorPalette] = useState(colors);
+    const handleLeftClick = () => {
+        if (colorSection === "NEUTRALS") {
+            setColorSection("COLORS")
+            setColorPalette(colors)
+        }
+    };
+    const handleRightClick = () => {
+        if (colorSection === "COLORS") {
+            setColorSection("NEUTRALS")
+            setColorPalette(neutrals)
+        }
+    };
 
     return (
         <div>
             <FormControl margin="normal" component="fieldset" style={{ margin: 'auto' }}>
-                <FormLabel component="legend" style={{ marginBottom: "10px" }}>Background</FormLabel>
+                <Typography id="settings-label" variant="body2" gutterBottom>
+                    BACKGROUND
+                </Typography>
+                <div style={{ display: 'inline' }}>
+                    <IconButton edge="start" size="small" onClick={() => handleLeftClick()}>
+                        <ArrowLeftIcon />
+                    </IconButton>
+                    <small>
+                        {colorSection}
+                    </small>
+                    <IconButton edge="end" size="small" onClick={() => handleRightClick()}>
+                        <ArrowRightIcon />
+                    </IconButton>
+                </div>
                 <CirclePicker
                     color={background}
-                    colors={["#f44336", "#e91e63", "#9c27b0", "#673ab7", "#3f51b5", "#2196f3", "#03a9f4", "#00bcd4", "#009688"]}
-                    width="130px"
+                    colors={colorPalette}
+                    width="180px"
                     onChange={color => {
                         setProp(props => props.background = color.hex)
                     }} />
             </FormControl>
+            <Divider style={{ marginTop: '15px' }} />
             <FormControl fullWidth={true} margin="normal" component="fieldset">
-                <FormLabel component="legend">Width</FormLabel>
-                <Slider min={100} max={1920} value={width} onChange={(_, value) => setProp(props => props.width = value)} />
+                <Typography id="settings-label" variant="body2" gutterBottom>
+                    WIDTH
+                </Typography>
+                <Slider min={100} max={2100} value={width || 100} onChange={(_, value) => setProp(props => props.width = value)} />
             </FormControl>
             <FormControl fullWidth={true} margin="normal" component="fieldset">
-                <FormLabel component="legend">Height</FormLabel>
-                <Slider min={100} max={1920} value={height} onChange={(_, value) => setProp(props => props.height = value)} />
+                <Typography id="settings-label" variant="body2" gutterBottom>
+                    HEIGHT
+                </Typography>
+                <Slider min={100} max={1920} value={height || 100} onChange={(_, value) => setProp(props => props.height = value)} />
             </FormControl>
-
-            {/* <FormControlLabel
+            <Divider />
+            <FormControl fullWidth={true} margin="normal" component="fieldset">
+                <Typography id="settings-label" variant="body2" gutterBottom>
+                    LEFT/RIGHT
+                </Typography>
+                <Slider min={0} max={1920} track='inverted' value={left} onChange={(_, value) => setProp(props => props.left = value)} />
+            </FormControl>
+            <FormControl fullWidth={true} margin="normal" component="fieldset">
+                <Typography id="settings-label" variant="body2" gutterBottom>
+                    UP/DOWN
+                </Typography>
+                <Slider min={0} max={900} track='inverted' value={top} onChange={(_, value) => setProp(props => props.top = value)} />
+            </FormControl>
+            <Divider />
+            <FormControlLabel
                 control={<Checkbox checked={checked} onChange={() => handleChecked()} name="checked" />}
-                label="Rounded"
-            /> */}
+                label={<Typography id="settings-label" variant="body2" gutterBottom>BORDERS</Typography>}
+            />
+
+            <FormControlLabel
+                control={<Checkbox checked={rounded} onChange={() => handleRounded()} name="checked" />}
+                label={<Typography id="settings-label" variant="body2" gutterBottom>CIRCLE</Typography>}
+            />
+            <Divider style={{ marginBottom: '8px' }} />
+            <Typography id="settings-label" variant="body2" gutterBottom>
+                JUSTIFY CONTENT
+            </Typography>
+            <ButtonGroup fullWidth size="small" aria-label="contained secondary button group" style={{ marginBottom: '20px' }}>
+                <Button variant="contained" onClick={() => handleJustify('flex-start')}>LEFT</Button>
+                <Button variant="contained" onClick={() => handleJustify('center')}>CENTER</Button>
+                <Button variant="contained" onClick={() => handleJustify('flex-end')}>RIGHT</Button>
+            </ButtonGroup>
+            <Typography id="settings-label" variant="body2" gutterBottom>
+                ALIGN ITEMS
+            </Typography>
+            <ButtonGroup fullWidth size="small" aria-label="contained secondary button group" style={{ marginBottom: '10px' }}>
+                <Button variant="contained" onClick={() => handleAlign('flex-end')}>BOTTOM</Button>
+                <Button variant="contained" color="default" onClick={() => handleAlign('center')}>CENTER</Button>
+                <Button variant="contained" onClick={() => handleAlign('flex-start')}>TOP</Button>
+            </ButtonGroup>
 
         </div>
     )
@@ -85,7 +202,13 @@ const StyledBoxSettings = () => {
 export const StyledBoxDefaultProps = {
     background: "#666666",
     width: '100px',
-    height: '100px'
+    height: '100px',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    justifyContent: 'center',
+    alignItems: 'center'
 };
 
 StyledBox.craft = {

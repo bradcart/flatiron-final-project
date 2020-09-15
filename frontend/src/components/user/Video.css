@@ -6,8 +6,19 @@
     display: inline-block;
 } */
 
+
+.edit-video-btn {
+    position: absolute;
+    z-index: 20;
+    top: 305px;
+    left: 2px;
+}
+
 .edit-video-icon {
-    position: relative;
-    left: 27vw;
-    top: 5.2vh;
+    color: #FFFFFF;
+    opacity: 0.8;
+}
+
+.edit-video-icon:hover{
+    opacity: 1;
 }

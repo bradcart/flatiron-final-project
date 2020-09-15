@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { useNode, useEditor } from '@craftjs/core';
-import { FormControl, FormLabel, Input, InputLabel, FormHelperText, IconButton, InputAdornment, Button, TextField, Tooltip } from '@material-ui/core';
+import { IconButton, Button, TextField, Tooltip, Typography } from '@material-ui/core';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import EditIcon from '@material-ui/icons/Edit';
-import styled from 'styled-components';
-import YouTube from 'react-youtube';
+import DragHandleIcon from '@material-ui/icons/DragHandle';
 import ReactPlayer from 'react-player/lazy';
-import StyledButton from '../styled/StyledButton';
 import './Video.css';
 
 
@@ -15,29 +13,57 @@ export const Video = ({ url }) => {
         parent: node.data.parent
     }));
     const { actions, query, connectors } = useEditor();
+    const { enabled } = useEditor((state) => ({
+        enabled: state.options.enabled,
+    }));
 
     return (
-        <div onClickCapture={(e) => (e.stopPropagation())} ref={ref => connect(drag(ref))}>
-            <Tooltip title="Edit Video" placement="top">
-                <Button
-                    className="edit-video-icon"
-                    onClick={(e) => {
-                        actions.selectNode(parent)
-                    }}>
-                    <EditIcon style={{ color: '#FFFFFF' }} />
-                </Button>
-            </Tooltip>
+        <div className="video-div"
+            ref={ref => connect(drag(ref))}
+            onClickCapture={(e) => (e.stopPropagation())}
+            style={{ position: 'relative', width: '100%', height: '100%' }}>
+            {enabled ? (
+                <div>
+                    <Tooltip title="Drag" placement="left">
+                        <IconButton className="edit-video-btn">
+                            <DragHandleIcon ref={ref => connect(drag(ref))} className="edit-video-icon" />
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Edit Video" placement="bottom">
+                        <IconButton
+                            className="edit-video-btn"
+                            onClick={() => {
+                                actions.selectNode(parent)
+                            }}>
+                            <EditIcon className="edit-video-icon" />
+                        </IconButton>
+                    </Tooltip>
+                </div>
+            ) : null}
             <ReactPlayer
+                className="youtube-player"
                 url={url}
+                config={{
+                    youtube: {
+                        playerVars: { modestBranding: 1 }
+                    }
+                }}
+                style={{ position: 'absolute', top: 0, left: 0 }}
             />
         </div >
     );
 };
 
+
 const VideoSettings = () => {
     const { url, actions: { setProp } } = useNode(node => ({
         url: node.data.props.url
     }));
+
+    const changeVideo = (e) => {
+        e.preventDefault();
+        setProp(props => props.url = videoId)
+    }
 
     const [videoId, setVideoId] = useState('')
 
@@ -57,27 +83,31 @@ const VideoSettings = () => {
                 } />
                 <FormHelperText id="video-helper-text">Enter a video URL here.</FormHelperText>
             </FormControl> */}
-            <form onSubmit={() => setProp(props => props.url = videoId)} noValidate>
+            <form onSubmit={(e) => changeVideo(e)} noValidate>
+                <Typography id="settings-label" variant="body2" gutterBottom>
+                    VIDEO URL
+                </Typography>
                 <TextField
                     // inputProps={{
                     //     className: classes.input
                     // }}
                     variant="outlined"
-                    margin="normal"
-                    fullWidth
-                    id="videoId"
-                    label="Video ID"
-                    name="Video ID"
+                    margin="dense"
+                    id="videoUrl"
+                    name="VIDEO URL"
                     onChange={e => setVideoId(e.target.value)}
+                    style={{ borderRadius: '8px 0 0 8px' }}
                 />
                 <Button
                     type="submit"
+                    size="medium"
                     variant="contained"
                     color="secondary"
                     fullWidth={false}
+                    style={{ marginTop: '7px', height: '40px', borderRadius: '0 8px 8px 0' }}
                 // className={classes.submit}
                 >
-                    SUBMIT
+                    CHANGE
                 </Button>
             </form>
         </div>

@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { Drawer, AppBar, Toolbar, List, Typography, Divider, IconButton, ListItem, ListItemIcon, ListItemText, Button as MaterialButton, Box, Grid, Tooltip, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField, Snackbar } from '@material-ui/core';
-import { Element, useEditor } from "@craftjs/core";
+import { Element, useEditor, useNode } from "@craftjs/core";
+import { useHistory } from 'react-router';
+import { useParams } from 'react-router-dom';
 import lz from "lzutf8";
 import copy from 'copy-to-clipboard';
 
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { Drawer, AppBar, Toolbar, List, Typography, Divider, IconButton, ListItem, ListItemIcon, ListItemText, Button as MaterialButton, Box, Grid, Tooltip, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Snackbar } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -18,8 +20,17 @@ import ViewDayOutlinedIcon from '@material-ui/icons/ViewDayOutlined';
 import MovieOutlinedIcon from '@material-ui/icons/MovieOutlined';
 import LibraryMusicOutlinedIcon from '@material-ui/icons/LibraryMusicOutlined';
 import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
+import FullscreenIcon from '@material-ui/icons/Fullscreen';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeading } from '@fortawesome/free-solid-svg-icons';
+import { faFont } from '@fortawesome/free-solid-svg-icons'
+import ChromeReaderModeOutlinedIcon from '@material-ui/icons/ChromeReaderModeOutlined';
+import ViewModuleOutlinedIcon from '@material-ui/icons/ViewModuleOutlined';
+import PhotoLibraryOutlinedIcon from '@material-ui/icons/PhotoLibraryOutlined';
+import GradientIcon from '@material-ui/icons/Gradient';
 
-
+import { Heading } from './user/Heading/Heading';
 import { Text } from './user/Text';
 import { Button } from './user/Button';
 import { GridRow } from './layout/GridRow';
@@ -27,11 +38,15 @@ import { GridCell } from './layout/GridCell';
 import { StyledBox } from './styled/StyledBox';
 import { Card } from './user/Card';
 import { Video } from './user/Video';
-import { FreeDrag } from './design/FreeDrag';
-import { useHistory } from 'react-router';
-import { useParams } from 'react-router-dom';
+import { Song } from './user/Song';
+import { Image } from './user/Image';
+import DragBox from './design/DragBox';
+import { ContainerDefaultProps } from './user/Container';
+import { ContainerMenu } from './user/Container';
+import { Landing } from './layout/Landing';
+import AutoGrid from './layout/AutoGrid';
+import { ImageContainer } from './user/ImageContainer';
 
-const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -94,24 +109,15 @@ const useStyles = makeStyles((theme) => ({
         // necessary for content to be below app bar
         ...theme.mixins.toolbar,
     },
-    // arrow: {
-    //     color: theme.palette.common.black,
-    // },
-    // tooltip: {
-    //     backgroundColor: theme.palette.common.black,
-    // },
     content: {
         flexGrow: 1,
         padding: theme.spacing(3),
     },
 }));
 
-export const MiniDrawer = () => {
-    const { connectors } = useEditor();
-    const classes = useStyles();
-    const theme = useTheme();
-    const [open, setOpen] = useState(false);
+const drawerWidth = 240;
 
+export const MiniDrawer = () => {
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -120,18 +126,22 @@ export const MiniDrawer = () => {
         setOpen(false);
     };
 
-    const { actions, query, enabled } = useEditor((state) => ({
-        enabled: state.options.enabled
-    }));
+    const { connectors, actions, query } = useEditor();
+    const classes = useStyles();
+    const theme = useTheme();
 
+    const [open, setOpen] = useState(false);
     const [dialogOpen, setDialogOpen] = useState(false);
+    const [title, setTitle] = useState('');
     const [snackbarMessage, setSnackbarMessage] = useState();
     const [stateToLoad, setStateToLoad] = useState();
+    const [containerMenu, toggleContainerMenu] = useState(false);
 
     const { id } = useParams();
     const saveTemplate = () => {
         const json = query.serialize();
         const identifier = lz.encodeBase64(lz.compress(json));
+        copy(identifier);
         // const user = JSON.parse(localStorage.getItem('user'));
         fetch(`http://localhost:3000/templates/${id}`, {
             method: "PATCH",
@@ -148,10 +158,11 @@ export const MiniDrawer = () => {
 
     const history = useHistory();
     const createPage = () => {
-        actions.setOptions((options) => (options.enabled = false))
+        actions.setOptions((options) => (options.enabled = false));
         const json = query.serialize();
         const compressedIdentifier = lz.encodeBase64(lz.compress(json));
         const user = JSON.parse(localStorage.getItem('user'));
+        const username = user['username'];
         fetch(`http://localhost:3000/pages`, {
             method: "POST",
             headers: {
@@ -160,6 +171,7 @@ export const MiniDrawer = () => {
                 Accept: 'application/json'
             },
             body: JSON.stringify({
+                title: title,
                 identifier: compressedIdentifier,
                 user_id: user.id
             })
@@ -167,9 +179,31 @@ export const MiniDrawer = () => {
             .then(res => res.json())
             .then(res => {
                 console.log(res)
-                history.push(`/pages/${res.id}`);
+                history.push(`/${username}/pages/${res.id}`);
             })
     }
+
+
+
+
+    // const { actions, query: {node}, enabled } = useEditor((state, query) => {
+    //     const enabled = state.options.enabled;
+    //     // const currentNodeId = 'ROOT';
+    //     let selected;
+
+
+    //     selected = {
+    //         id: currentNodeId,
+    //         name: state.node[currentNodeId].data.displayName,
+    //         settings: state.node[currentNodeId].related && state.nodes[currentNodeId].related.settings,
+    //         isDeletable: query.node(currentNodeId).isDeletable()
+    //     };
+
+
+    //     return {
+    //         selected
+    //     }
+    // });
 
     return (
         <Grid container>
@@ -194,8 +228,9 @@ export const MiniDrawer = () => {
                             >
                                 <MenuIcon />
                             </IconButton>
-                            <h3 style={{ color: '#F0F5F3', marginBottom: '19px' }}>BRAVURA.</h3>
+                            <h3 style={{ color: '#F0F5F3', marginBottom: '19px' }}>REACTORY.</h3>
                             <Grid container justify='flex-end'>
+
                                 <MaterialButton
                                     className={classes.exportButton}
                                     size="small"
@@ -204,16 +239,16 @@ export const MiniDrawer = () => {
                                     onClick={saveTemplate}
                                 >
                                     Save
-          </MaterialButton>
+                                </MaterialButton>
                                 <MaterialButton
                                     className={classes.exportButton}
                                     size="small"
                                     variant="outlined"
                                     color="secondary"
-                                    onClick={createPage}
+                                    onClick={setDialogOpen}
                                 >
                                     Export
-                    </MaterialButton>
+                                </MaterialButton>
                             </Grid>
                             <Dialog
                                 open={dialogOpen}
@@ -221,32 +256,33 @@ export const MiniDrawer = () => {
                                 fullWidth
                                 maxWidth="md"
                             >
-                                <DialogTitle id="alert-dialog-title">Load state</DialogTitle>
+                                <DialogTitle id="alert-dialog-title">Page Title</DialogTitle>
                                 <DialogContent>
                                     <TextField
-                                        multiline
                                         fullWidth
-                                        placeholder='Paste the contents that was copied from the "Copy Current State" button'
+                                        placeholder='Enter a title for your new page...'
                                         size="small"
-                                        value={stateToLoad}
-                                        onChange={e => setStateToLoad(e.target.value)}
+                                        color="secondary"
+                                        value={title}
+                                        onChange={e => setTitle(e.target.value)}
                                     />
                                 </DialogContent>
                                 <DialogActions>
-                                    <MaterialButton onClick={() => setDialogOpen(false)} color="primary">
+                                    <MaterialButton onClick={() => setDialogOpen(false)} color="secondary">
                                         Cancel
                             </MaterialButton>
                                     <MaterialButton
                                         onClick={() => {
                                             setDialogOpen(false);
-                                            const json = lz.decompress(lz.decodeBase64(stateToLoad));
-                                            actions.deserialize(json);
-                                            setSnackbarMessage("State loaded")
+                                            createPage();
+                                            // const json = lz.decompress(lz.decodeBase64(stateToLoad));
+                                            // actions.deserialize(json);
+                                            // setSnackbarMessage("State loaded")
                                         }}
-                                        color="primary"
+                                        color="secondary"
                                         autoFocus
                                     >
-                                        Load
+                                        Submit
                             </MaterialButton>
                                 </DialogActions>
                             </Dialog>
@@ -283,13 +319,21 @@ export const MiniDrawer = () => {
                     </div>
                     <Divider />
                     <List style={{ marginLeft: '5px' }}>
-                        <ListItem button key='Text' ref={ref => connectors.create(ref, <Text />)}>
+                        <ListItem button key='Heading' ref={ref => connectors.create(ref, <Heading />)}>
                             <ListItemIcon>
-                                <Tooltip title="Text" placement="right">
+                                <Tooltip title="Heading" placement="right">
+                                    <FontAwesomeIcon icon={faHeading} style={{ fontSize: 20, marginLeft: '2px' }} />
+                                </Tooltip>
+                            </ListItemIcon>
+                            <ListItemText primary='Heading' />
+                        </ListItem>
+                        <ListItem button key='Paragraph' ref={ref => connectors.create(ref, <Text />)}>
+                            <ListItemIcon>
+                                <Tooltip title="Paragraph" placement="right">
                                     <TextFieldsIcon />
                                 </Tooltip>
                             </ListItemIcon>
-                            <ListItemText primary='Text' />
+                            <ListItemText primary='Paragraph' />
                         </ListItem>
                         <ListItem button key='Button' ref={ref => connectors.create(ref, <Button />)}>
                             <ListItemIcon>
@@ -308,7 +352,7 @@ export const MiniDrawer = () => {
                             </ListItemIcon>
                             <ListItemText primary='Video' />
                         </ListItem>
-                        <ListItem button key='Song' ref={ref => connectors.create(ref, <Video />)}>
+                        <ListItem button key='Song' ref={ref => connectors.create(ref, <Song />)}>
                             <ListItemIcon>
                                 <Tooltip title="Song" placement="right">
                                     <LibraryMusicOutlinedIcon />
@@ -316,7 +360,31 @@ export const MiniDrawer = () => {
                             </ListItemIcon>
                             <ListItemText primary='Song' />
                         </ListItem>
+                        <ListItem button key='Image' ref={ref => connectors.create(ref, <ImageContainer />)}>
+                            <ListItemIcon>
+                                <Tooltip title="Image" placement="right">
+                                    <PhotoLibraryOutlinedIcon />
+                                </Tooltip>
+                            </ListItemIcon>
+                            <ListItemText primary='Image' />
+                        </ListItem>
                         <Divider />
+                        <ListItem button key='Landing' ref={ref => connectors.create(ref, <Element is={Landing} canvas />)}>
+                            <ListItemIcon>
+                                <Tooltip title="Landing" placement="right">
+                                    <ChromeReaderModeOutlinedIcon />
+                                </Tooltip>
+                            </ListItemIcon>
+                            <ListItemText primary='Landing' />
+                        </ListItem>
+                        <ListItem button key='AutoGrid' ref={ref => connectors.create(ref, <Element is={AutoGrid} canvas />)}>
+                            <ListItemIcon>
+                                <Tooltip title="AutoGrid" placement="right">
+                                    <ViewModuleOutlinedIcon />
+                                </Tooltip>
+                            </ListItemIcon>
+                            <ListItemText primary='AutoGrid' />
+                        </ListItem>
                         <ListItem button key='Row' ref={ref => connectors.create(ref, <Element is={GridRow} canvas />)}>
                             <ListItemIcon>
                                 <Tooltip title="Row" placement="right">
@@ -351,13 +419,13 @@ export const MiniDrawer = () => {
                             <ListItemText primary='Card' />
                         </ListItem>
                         <Divider />
-                        <ListItem button key='FreeDrag' ref={ref => connectors.create(ref, <FreeDrag />)}>
+                        <ListItem button key='DragBox' ref={ref => connectors.create(ref, <DragBox />)}>
                             <ListItemIcon>
-                                <Tooltip title="FreeDrag" placement="right">
+                                <Tooltip title="DragBox" placement="right">
                                     <DragIndicatorIcon />
                                 </Tooltip>
                             </ListItemIcon>
-                            <ListItemText primary='FreeDrag' />
+                            <ListItemText primary='DragBox' />
                         </ListItem>
                     </List>
                 </Drawer>

@@ -11,6 +11,7 @@ import { FreeDrag } from '../components/design/FreeDrag';
 import { StyledBox } from '../components/styled/StyledBox';
 import { GridRow } from '../components/layout/GridRow';
 import { GridCell } from '../components/layout/GridCell';
+import { Landing } from '../components/layout/Landing';
 // import Backdrop from '../components/styled/StyledBackdrop';
 import Background from '../assets/gray-texture2.png';
 import lz from "lzutf8";
@@ -37,7 +38,7 @@ export default function PageView() {
     return (
         <div className="translate-container">
             <div className="scale-container">
-                <Editor enabled={false} resolver={{ Card, Button, Text, Container, CardTop, CardBottom, Video, FreeDrag, StyledBox, GridRow, GridCell }}>
+                <Editor enabled={false} resolver={{ Card, Button, Text, Container, CardTop, CardBottom, Video, FreeDrag, StyledBox, GridRow, GridCell, Landing }}>
                     {(json !== null) ? (
                         <Frame json={json}>
                             <Element className='overflow-container' is={Container} minWidth='80vw' minHeight='80vh' padding='0' background="#FFFFFF" canvas>

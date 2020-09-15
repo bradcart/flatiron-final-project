@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import {
-    Switch,
-    Route,
-    Redirect
-} from "react-router-dom";
-import { useHistory, useParams } from "react-router";
-import { Paper, Grid, Box } from '@material-ui/core';
+import { useParams } from "react-router";
+import { Grid } from '@material-ui/core';
 import { Editor, Frame, Element } from "@craftjs/core";
 import { SettingsPanel } from '../components/SettingsPanel';
 import { MiniDrawer } from '../components/MiniDrawer';
@@ -13,30 +8,27 @@ import { Container } from '../components/user/Container';
 import { Button } from '../components/user/Button';
 import { Card, CardTop, CardBottom } from '../components/user/Card';
 import { Text } from '../components/user/Text';
-import { Page } from '../components/user/Page';
+import { Heading } from '../components/user/Heading/Heading';
 import { Video } from '../components/user/Video';
+import { Song } from '../components/user/Song';
+import { ImageContainer } from '../components/user/ImageContainer';
 import { FreeDrag } from '../components/design/FreeDrag';
+import DragBox from '../components/design/DragBox';
 import { StyledBox } from '../components/styled/StyledBox';
 import { GridRow } from '../components/layout/GridRow';
 import { GridCell } from '../components/layout/GridCell';
+import AutoGrid from '../components/layout/AutoGrid';
+import { Landing } from '../components/layout/Landing';
 // import Backdrop from '../components/styled/StyledBackdrop';
 import Background from '../assets/gray-texture2.png';
 import lz from "lzutf8";
-import PageView from './PageView';
-// import './components/filters/FilmGrain.css';
 import './Edit.css';
 
 export default function Edit() {
     // const [enabled, setEnabled] = useState(true);
     const [json, setJson] = useState(null);
-    // const [viewPage, toggleViewPage] = useState(false);
-    // const [page, setPage] = useState('');
-    // const [pageId, setPageId] = useState(null);
-    // const [xHeight, setXHeight] = useState('100vh');
-    // const [xWidth, setXWidth] = useState('75vw');
-    // const [xProps, setXProps] = useState(false);
 
-    const { id } = useParams();
+    const { id } = useParams('id');
     useEffect(() => {
         fetch(`http://localhost:3000/templates/${id}`, {
             method: "GET",
@@ -50,9 +42,72 @@ export default function Edit() {
             .then(result => setJson(result))
     }, []);
 
-    // const handleExport = () => {
-    //     setXHeight('100vh');
-    //     setXWidth('100vw');
+
+
+    // const useStateWithPromise = (initialState) => {
+    //     const [value, setValue] = useState(initialState);
+    //     const resolverRef = useRef(null);
+
+    //     useEffect(() => {
+    //         if (resolverRef.current) {
+    //             resolverRef.current(state);
+    //             resolverRef.current = null;
+    //         }
+    //         /**
+    //          * Since a state update could be triggered with the exact same state again,
+    //          * it's not enough to specify state as the only dependency of this useEffect.
+    //          * That's why resolverRef.current is also a dependency, because it will guarantee,
+    //          * that handleSetState was called in previous render
+    //          */
+    //     }, [resolverRef.current, state]);
+
+    //     const handleSetState = useCallback((stateAction) => {
+    //         setState(stateAction);
+    //         return new Promise(resolve => {
+    //             resolverRef.current = resolve;
+    //         });
+    //     }, [setState])
+
+    //     return [state, handleSetState];
+    // };
+
+    // const handlePageExport = (initialValue = false) => {
+    //     const [value, setValue] = useStateWithPromise(initialValue);
+
+    //     const reset = () => {
+    //         // this will return a promise containing the updated state
+    //         return setValue(initialValue);
+    //     }
+
+    //     return {
+    //         value,
+    //         setValue,
+    //         reset
+    //     }
+    // };
+
+    // const FiltersSidebar = () => {
+    //     //...
+    //     const [resetted, setResetted] = useState(false)
+
+    //     useEffect(() => {
+    //         if (resetted) {
+    //             fetchArticles();
+    //             setResetted(false);
+    //         }
+    //     }, [resetted]);
+
+    //     const reset = async () => {
+    //         await Promise.all([
+    //             colorFilter.reset(),
+    //             nameFilter.reset(),
+    //             releaseDateFilter.reset()
+    //         ]);
+
+    //         setResetted(true);
+    //     }
+
+    //     // ...
     // }
 
     // const scaleToPage = (el) => {
@@ -63,60 +118,28 @@ export default function Edit() {
     //     )
     // };
 
+   
+
     return (
-        <div style={{ margin: "0 auto", overflowX: 'hidden', minHeight: '100vh', backgroundImage: "url(" + Background + ")", backgroundSize: 'auto', backgroundRepeat: 'repeat' }}>
-            <Editor resolver={{ Card, Button, Text, Container, CardTop, CardBottom, Video, FreeDrag, StyledBox, GridRow, GridCell }}>
+        <div style={{ position:'relative', margin: "auto", minHeight: '100vh', backgroundImage: "url(" + Background + ")", backgroundSize: 'auto', backgroundRepeat: 'repeat' }}>
+            <Editor resolver={{ Card, Button, Text, Heading, Container, CardTop, CardBottom, Video, Song, FreeDrag, StyledBox, GridRow, GridCell, AutoGrid, Landing, DragBox, ImageContainer }}>
                 <Grid container wrap='nowrap'>
                     <Grid item xs={2}>
                         <MiniDrawer />
                     </Grid>
-                    <Grid item xs>
+                    <Grid item xs={12}>
                         {(json !== null) ? (
                             <Grid className='frame-container' container>
-                                <Frame>
-                                    <Element is={Container} className="container-paper" canvas>
-                                        <Element is={GridRow} width={12} canvas>
-                                            <Element is={GridCell} width={4} canvas>
-                                            
-                                            </Element>
-                                            <Element is={GridCell} width={4} canvas>
-                                            
-                                            </Element>
-                                            <Element is={GridCell} width={4} canvas>
-                                            
-                                            </Element>
-                                        </Element>
-                                        <Element is={GridRow} width={12} canvas>
+                                <Frame json={json}>
+                                    <Element is={Container} canvas>
 
-                                        </Element>
-                                        <Element is={GridRow} width={12} canvas>
-
-                                        </Element>
-                                        <Element is={GridRow} width={12} canvas>
-
-                                        </Element>
-                                        <Element is={GridRow} width={12} canvas>
-
-                                        </Element>
-                                        <Element is={GridRow} width={12} canvas>
-
-                                        </Element>
-                                        <Element is={GridRow} width={12} canvas>
-
-                                        </Element>
-                                        <Element is={GridRow} width={12} canvas>
-
-                                        </Element>
                                     </Element>
                                 </Frame>
                             </Grid>
                         ) : null}
                     </Grid>
                     <Grid item xs={2}>
-                        <Paper>
-                            {/* <Toolbox /> */}
-                            <SettingsPanel />
-                        </Paper>
+                        <SettingsPanel />
                     </Grid>
                 </Grid>
             </Editor>

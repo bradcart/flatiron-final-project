@@ -16,6 +16,7 @@ ActiveRecord::Schema.define(version: 2020_09_03_015754) do
   enable_extension "plpgsql"
 
   create_table "pages", force: :cascade do |t|
+    t.string "title"
     t.string "identifier"
     t.string "photoUrl"
     t.bigint "user_id"

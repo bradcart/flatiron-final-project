@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
+import Alert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
@@ -60,11 +59,10 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-
 export default function SignIn(props) {
     const classes = useStyles();
     const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('')
+    const [password, setPassword] = useState('');
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -83,11 +81,18 @@ export default function SignIn(props) {
             .then(res => res.json())
             .then(json => {
                 json["error"] ? (
-                    alert('Invalid username and/or password.')
-                )   : (
-                    props.logIn(json)
-                )}
+                    alertError()
+                ) : (
+                        props.logIn(json)
+                    )
+            }
             )
+    }
+
+    const alertError = () => {
+        return (
+           <Alert severity="error">Invalid username and/or password.</Alert>
+        )
     }
 
     return (

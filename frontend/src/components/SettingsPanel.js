@@ -1,9 +1,12 @@
 import React from 'react';
-import { Chip, Divider, Typography, Button as MaterialButton, Box, Grid, ClickAwayListener } from "@material-ui/core";
-import { positions, typography } from '@material-ui/system';
+import { Paper, Chip, Divider, Typography, Button as MaterialButton, Box, Grid, ClickAwayListener, IconButton } from "@material-ui/core";
+import Slide from '@material-ui/core/Slide';
 import { useEditor } from "@craftjs/core";
 import { ThemeProvider } from "@material-ui/styles";
+import DragHandleIcon from '@material-ui/icons/DragHandle';
+import './SettingsPanel.css'
 import EditorTheme from './themes/EditorTheme';
+import Draggable, { DraggableCore } from 'react-draggable';
 
 export const SettingsPanel = () => {
     const { actions, selected } = useEditor((state, query) => {
@@ -24,41 +27,62 @@ export const SettingsPanel = () => {
         }
     });
 
-    return selected ? (
+    const handleClickAway = (e) => {
+        console.log(e)
+    };
+
+
+    return selected && selected.name !== 'Frame' ? (
         <ThemeProvider theme={EditorTheme}>
-            <ClickAwayListener mouseEvent="onMouseDown" onClickAway={() => actions.clearEvents()}>
-                <Box bgcolor="rgba(0, 0, 0, 0.06)" mt={10} px={2} py={2} zIndex="tooltip" textAlign="center">
-                    <Grid container direction="column" spacing={3}>
-                        <Grid item>
-                            <Box pb={1}>
-                                <Grid container alignItems="center">
-                                    <Grid item xs><Typography variant="subtitle1">Selected</Typography></Grid>
-                                    <Grid item><Chip size="small" color="default" label={selected.name} /></Grid>
+            {console.log(selected)}
+            {/* <ClickAwayListener mouseEvent="onMouseDown" onClickAway={(e) => handleClickAway(e)}> */}
+            <Slide in={Object.keys(selected).length > 0} direction="left">
+                <Draggable handle="#handle" >
+                    <Paper style={{ position: 'relative', zIndex: 5, width: '80%', backgroundColor: '#f2f2f2' }}>
+                        <Box rbgcolor="rgba(240, 245, 243, 0.06)" mt={10} px={3} py={1} textAlign="center" style={{ zIndex: 5 }}>
+                            <Grid container direction="column">
+                                <Grid item>
+                                    <Box pb={1}>
+                                        <Grid container justify="center" alignItems="center" style={{ marginRight: '5px' }}>
+                                            <IconButton id="handle" edge='start' style={{position: 'absolute', left: '8px', top: '5px'}}>
+                                                <DragHandleIcon id="handle" />
+                                            </IconButton>
+                                            <Grid item xs={12}>
+                                                <Typography id="settings-label" variant="body2" gutterBottom>
+                                                    SELECTED
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item xs>
+                                                <Chip size="small" color="default" label={selected.name} />
+                                            </Grid>
+                                        </Grid>
+                                    </Box>
+                                    <Divider style={{ marginBottom: '10px' }} />
                                 </Grid>
-                            </Box>
-                            <Divider style={{ marginBottom: '10px' }} />
-                        </Grid>
-                        {
-                            selected.settings && React.createElement(selected.settings)
-                        }
-                        {
-                            selected.isDeletable ? (
-                                <div>
-                                    <Divider style={{ margin: '10px 0' }} />
-                                    <MaterialButton
-                                        variant="contained"
-                                        color="secondary"
-                                        onClick={() => {
-                                            actions.delete(selected.id);
-                                        }}>
-                                        Delete
+                                {
+                                    selected.settings && React.createElement(selected.settings)
+                                }
+                                {
+                                    selected.isDeletable ? (
+                                        <div>
+                                            <Divider style={{ margin: '10px 0' }} />
+                                            <MaterialButton
+                                                variant="contained"
+                                                color="secondary"
+                                                onClick={() => {
+                                                    actions.delete(selected.id);
+                                                }}>
+                                                Delete
                                 </MaterialButton>
-                                </div>
-                            ) : null
-                        }
-                    </Grid>
-                </Box>
-            </ClickAwayListener>
-        </ThemeProvider>
+                                        </div>
+                                    ) : null
+                                }
+                            </Grid>
+                        </Box>
+                    </Paper>
+                </Draggable>
+            </Slide>
+            {/* </ClickAwayListener> */}
+        </ThemeProvider >
     ) : null
 }

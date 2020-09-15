@@ -28,5 +28,29 @@ code {
        url('./assets/fonts/basier/basiersquaremono-regular-webfont.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
+}
 
+@font-face {
+  font-family: 'saonara';
+  src: url('./assets/fonts/saonara-2.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'archiv_grotesk';
+  src: url('./assets/fonts/ArchivGroteskTrial-RegularTrial.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'tomato_soup';
+  src: url('./assets/fonts/TomatoSoup-Regular.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'brown_fox';
+  src: url('./assets/fonts/BrownFox.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'maragsa';
+  src: url('./assets/fonts/Maragsa-Display.otf') format('opentype');
 }
