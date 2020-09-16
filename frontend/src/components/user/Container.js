@@ -18,7 +18,6 @@ export const Container = ({ background, padding, marginTop, right, left, transfo
     const { connectors: { connect, drag } } = useNode();
     return (
         <div>
-            <span><ContainerMenu ref={connect} /></span>
             <Paper variant="outlined" className={`${filmGrain ? "container-paper film-grain" : "container-paper"}`} square ref={connect} style={{
                 background,
                 position: 'absolute',
@@ -41,7 +40,7 @@ export const Container = ({ background, padding, marginTop, right, left, transfo
 }
 
 //menu being used in MiniDrawer
-export const ContainerMenu = React.forwardRef((props, ref) => {
+export const ContainerSettings = () => {
     const { connectors: { connect }, background, padding, width, height, marginTop, right, transform, filmGrain, actions: { setProp } } = useNode(node => ({
         background: node.data.props.background,
         padding: node.data.props.padding,
@@ -53,36 +52,9 @@ export const ContainerMenu = React.forwardRef((props, ref) => {
         filmGrain: node.data.props.filmGrain
     }));
 
-    const { enabled } = useEditor((state) => ({
-        enabled: state.options.enabled,
-    }));
-
-
-
-    const toggleFullscreen = () => {
-        if (toggled === false) {
-            setToggled(true);
-            setProp(props => props.height = '100vh');
-            setProp(props => props.width = '100vw');
-            setProp(props => props.marginTop = '0');
-            setProp(props => props.transform = 250);
-        } else {
-            setToggled(false);
-            setProp(props => props.height = '85vh')
-            setProp(props => props.width = '80vw')
-            setProp(props => props.marginTop = '10vh')
-            setProp(props => props.transform = 0)
-        }
-    };
-
-    const [anchorEl, setAnchorEl] = React.useState(null);
-
-    const handleClick = (event) => {
-        setAnchorEl(anchorEl ? null : event.currentTarget);
-    };
-
-    const open = Boolean(anchorEl);
-    const id = open ? 'container-popper' : undefined;
+    const { connectors, enabled, selected } = useEditor((state) => {
+        const enabled = state.options.enabled;
+    });
 
     const theme = createMuiTheme({
         palette: {
@@ -111,15 +83,36 @@ export const ContainerMenu = React.forwardRef((props, ref) => {
         }
     });
 
-    const classes = useStyles();
+    // const classes = useStyles();
     const switchStyles = useN02SwitchStyles();
+
+
+
+    const toggleFullscreen = () => {
+        if (toggled === false) {
+            setToggled(true);
+            setProp(props => props.height = '100vh');
+            setProp(props => props.width = '100vw');
+            setProp(props => props.marginTop = '0');
+            setProp(props => props.transform = 250);
+        } else {
+            setToggled(false);
+            setProp(props => props.height = '85vh')
+            setProp(props => props.width = '80vw')
+            setProp(props => props.marginTop = '10vh')
+            setProp(props => props.transform = 0)
+        }
+    };
+
+
+
     const [toggled, setToggled] = useState(false);
     const [grain, toggleGrain] = useState(false);
 
     const handleGrain = () => {
         if (grain === true) {
-        toggleGrain(false)
-        setProp(props => props.filmGrain = false)
+            toggleGrain(false)
+            setProp(props => props.filmGrain = false)
         } else {
             toggleGrain(true)
             setProp(props => props.filmGrain = true)
@@ -145,82 +138,64 @@ export const ContainerMenu = React.forwardRef((props, ref) => {
     };
 
     return (
-        <div ref={ref} className='container-menu'>
-            {enabled ? (
-                <ThemeProvider theme={theme}>
-                    <MaterialButton
-                        ref={connect}
-                        style={{ width: '164px' }}
-                        className={classes.exportButton}
-                        size="small"
-                        variant="outlined"
-                        color="secondary"
-                        endIcon={<KeyboardArrowDownIcon />}
-                        onClick={handleClick}
-                    >
-                        Page Settings
-                </MaterialButton>
-                    <Popper id={id} open={open} anchorEl={anchorEl}>
-                        <div>
-                            <Paper style={{ position: 'relative', margin: 'auto', zIndex: 5, width: '100%', backgroundColor: '#f2f2f2' }}>
-                                <Box rbgcolor="rgba(28, 28, 28, 1)" px={3} py={2} textAlign="center" style={{ zIndex: 5 }}>
-                                    <Grid container direction="column">
-                                        <div style={{ margin: '20px auto 5px' }}>
-                                            <Typography id="settings-label" variant="body2" gutterBottom>
-                                                FULLSCREEN
+        <ThemeProvider theme={theme}>
+            <div>
+                <Paper style={{ position: 'relative', margin: 'auto', zIndex: 5, width: '100%', backgroundColor: '#f2f2f2' }}>
+                    <Box rbgcolor="rgba(28, 28, 28, 1)" px={3} py={2} textAlign="center" style={{ zIndex: 5 }}>
+                        <Grid container direction="column">
+                            <div style={{ margin: '20px auto 5px' }}>
+                                <Typography id="settings-label" variant="body2" gutterBottom>
+                                    FULLSCREEN
                                             </Typography>
-                                            <Switch
-                                                classes={switchStyles}
-                                                checked={toggled}
-                                                onChange={toggleFullscreen}
-                                            />
-                                            <br />
-                                            <FormControlLabel
-                                                control={<Checkbox checked={grain} onChange={() => handleGrain()} name="checked" />}
-                                                label={<Typography id="settings-label" variant="body2" gutterBottom>FILM GRAIN (experimental)</Typography>}
-                                            />
-                                            <Divider style={{ marginBottom: '10px' }} />
-                                            <FormControl margin="normal" component="fieldset" style={{ margin: 'auto' }}>
-                                                <Typography id="settings-label" variant="body2" gutterBottom>
-                                                    BACKGROUND
+                                <Switch
+                                    classes={switchStyles}
+                                    checked={toggled}
+                                    onChange={toggleFullscreen}
+                                />
+                                <br />
+                                <FormControlLabel
+                                    control={<Checkbox checked={grain} onChange={() => handleGrain()} name="checked" />}
+                                    label={<Typography id="settings-label" variant="body2" gutterBottom>FILM GRAIN (experimental)</Typography>}
+                                />
+                                <Divider style={{ marginBottom: '10px' }} />
+                                <FormControl margin="normal" component="fieldset" style={{ margin: 'auto' }}>
+                                    <Typography id="settings-label" variant="body2" gutterBottom>
+                                        BACKGROUND
                                                 </Typography>
-                                                <div style={{ display: 'inline' }}>
-                                                    <IconButton edge="start" size="small" onClick={() => handleLeftClick()}>
-                                                        <ArrowLeftIcon />
-                                                    </IconButton>
-                                                    <small>
-                                                        {colorSection}
-                                                    </small>
-                                                    <IconButton edge="end" size="small" onClick={() => handleRightClick()}>
-                                                        <ArrowRightIcon />
-                                                    </IconButton>
-                                                </div>
-                                                <CirclePicker
-                                                    color={background}
-                                                    colors={colorPalette}
-                                                    width="180px"
-                                                    onChange={color => {
-                                                        setProp(props => props.background = color.hex)
-                                                    }} />
-                                            </FormControl>
-                                            <Divider style={{ marginTop: '15px' }} />
-                                            <FormControl fullWidth={true} margin="normal" component="fieldset">
-                                                <Typography id="settings-label" variant="body2" gutterBottom>
-                                                    PADDING
+                                    <div style={{ display: 'inline' }}>
+                                        <IconButton edge="start" size="small" onClick={() => handleLeftClick()}>
+                                            <ArrowLeftIcon />
+                                        </IconButton>
+                                        <small>
+                                            {colorSection}
+                                        </small>
+                                        <IconButton edge="end" size="small" onClick={() => handleRightClick()}>
+                                            <ArrowRightIcon />
+                                        </IconButton>
+                                    </div>
+                                    <CirclePicker
+                                        color={background}
+                                        colors={colorPalette}
+                                        width="180px"
+                                        onChange={color => {
+                                            setProp(props => props.background = color.hex)
+                                        }} />
+                                </FormControl>
+                                <Divider style={{ marginTop: '15px' }} />
+                                <FormControl fullWidth={true} margin="normal" component="fieldset">
+                                    <Typography id="settings-label" variant="body2" gutterBottom>
+                                        PADDING
                                                 </Typography>
-                                                <Slider value={padding} color="secondary" onChange={(_, value) => setProp(props => props.padding = value)} />
-                                            </FormControl>
-                                        </div>
-                                    </Grid>
-                                </Box>
-                            </Paper>
-                        </div>
-                    </Popper>
-                </ThemeProvider>
-            ) : null}
-        </div>
+                                    <Slider value={padding} color="secondary" onChange={(_, value) => setProp(props => props.padding = value)} />
+                                </FormControl>
+                            </div>
+                        </Grid>
+                    </Box>
+                </Paper>
+            </div>
+        </ThemeProvider>
     )
-});
+};
 
 // export const ContainerSettings = () => {
 //     const { background, padding, width, height, marginTop, right, actions: { setProp } } = useNode(node => ({
@@ -313,7 +288,7 @@ Container.craft = {
     displayName: "Frame",
     props: ContainerDefaultProps,
     related: {
-        settings: ContainerMenu
+        settings: ContainerSettings
     }
 }
 

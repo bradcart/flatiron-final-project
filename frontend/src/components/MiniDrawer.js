@@ -7,7 +7,7 @@ import lz from "lzutf8";
 import copy from 'copy-to-clipboard';
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { Drawer, AppBar, Toolbar, List, Typography, Divider, IconButton, ListItem, ListItemIcon, ListItemText, Button as MaterialButton, Box, Grid, Tooltip, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Snackbar } from '@material-ui/core';
+import { Drawer, AppBar, Toolbar, List, Typography, Divider, IconButton, ListItem, ListItemIcon, ListItemText, Button as MaterialButton, Box, Grid, Tooltip, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Snackbar, Popper } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -41,8 +41,8 @@ import { Video } from './user/Video';
 import { Song } from './user/Song';
 import { Image } from './user/Image';
 import DragBox from './design/DragBox';
-import { ContainerDefaultProps } from './user/Container';
-import { ContainerMenu } from './user/Container';
+import { Container, ContainerDefaultProps } from './user/Container';
+import { ContainerMenu } from './user/ContainerMenu';
 import { Landing } from './layout/Landing';
 import AutoGrid from './layout/AutoGrid';
 import { ImageContainer } from './user/ImageContainer';
@@ -115,6 +115,8 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+
+
 const drawerWidth = 240;
 
 export const MiniDrawer = () => {
@@ -126,7 +128,23 @@ export const MiniDrawer = () => {
         setOpen(false);
     };
 
-    const { connectors, actions, query } = useEditor();
+    const { connectors, actions, query, selected } = useEditor((state) => {
+        const currentNodeId = state.events.selected;
+        let selected;
+
+        if (currentNodeId) {
+            selected = {
+                id: currentNodeId,
+                name: state.nodes[currentNodeId].data.displayName,
+                settings: state.nodes[currentNodeId].related && state.nodes[currentNodeId].related.settings
+            }
+        }
+
+        return {
+            selected
+        }
+    });
+
     const classes = useStyles();
     const theme = useTheme();
 
@@ -205,6 +223,13 @@ export const MiniDrawer = () => {
     //     }
     // });
 
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const popperOpen = Boolean(anchorEl);
+    const popperId = popperOpen ? 'container-popper' : undefined;
+    const handleClick = (event) => {
+        setAnchorEl(anchorEl ? null : event.currentTarget);
+    };
+
     return (
         <Grid container>
             <Grid item xs={12}>
@@ -230,7 +255,21 @@ export const MiniDrawer = () => {
                             </IconButton>
                             <h3 style={{ color: '#F0F5F3', marginBottom: '19px' }}>REACTORY.</h3>
                             <Grid container justify='flex-end'>
-
+                                <MaterialButton
+                                    ref={ref => connectors.select(ref, "ROOT")}
+                                    style={{ width: '164px' }}
+                                    className={classes.exportButton}
+                                    size="small"
+                                    variant="outlined"
+                                    color="secondary"
+                                    endIcon={<KeyboardArrowDownIcon />}
+                                    onClick={handleClick}
+                                >
+                                    Page Settings
+                                </MaterialButton>
+                                <Popper id={popperId} open={popperOpen} anchorEl={anchorEl}>
+                                    <ContainerMenu />
+                                </Popper>
                                 <MaterialButton
                                     className={classes.exportButton}
                                     size="small"

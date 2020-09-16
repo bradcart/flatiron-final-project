@@ -5,6 +5,7 @@ import { Editor, Frame, Element } from "@craftjs/core";
 import { SettingsPanel } from '../components/SettingsPanel';
 import { MiniDrawer } from '../components/MiniDrawer';
 import { Container } from '../components/user/Container';
+import { ContainerMenu } from '../components/user/ContainerMenu';
 import { Button } from '../components/user/Button';
 import { Card, CardTop, CardBottom } from '../components/user/Card';
 import { Text } from '../components/user/Text';
@@ -118,10 +119,10 @@ export default function Edit() {
     //     )
     // };
 
-   
+
 
     return (
-        <div style={{ position:'relative', margin: "auto", minHeight: '100vh', backgroundImage: "url(" + Background + ")", backgroundSize: 'auto', backgroundRepeat: 'repeat' }}>
+        <div style={{ position: 'relative', margin: "auto", minHeight: '100vh', backgroundImage: "url(" + Background + ")", backgroundSize: 'auto', backgroundRepeat: 'repeat' }}>
             <Editor resolver={{ Card, Button, Text, Heading, Container, CardTop, CardBottom, Video, Song, FreeDrag, StyledBox, GridRow, GridCell, AutoGrid, Landing, DragBox, ImageContainer }}>
                 <Grid container wrap='nowrap'>
                     <Grid item xs={2}>
