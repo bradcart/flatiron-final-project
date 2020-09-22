@@ -55,7 +55,7 @@ const GridRowSettings = () => {
             setProp(props => props.border = 0)
         } else {
             toggleChecked(true)
-            setProp(props => props.border = 1)
+            setProp(props => props.border = '1px dashed black')
         }
     };
 
@@ -156,6 +156,7 @@ const GridRowSettings = () => {
 const GridRowDefaultProps = {
     background: "#ffffff",
     height: '131.1px',
+    width: 12,
     border: '1px dashed black'
 };
 

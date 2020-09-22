@@ -178,7 +178,7 @@ export default function SignUp(props) {
                                 type="submit"
                                 fullWidth={true}
                                 className={classes.submit}
-                                label="SIGN UP"
+                                children="SIGN UP"
                             />
                         </Grid>
                         <Grid container>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_03_015754) do
+ActiveRecord::Schema.define(version: 2020_09_17_132045) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,20 +18,26 @@ ActiveRecord::Schema.define(version: 2020_09_03_015754) do
   create_table "pages", force: :cascade do |t|
     t.string "title"
     t.string "identifier"
-    t.string "photoUrl"
-    t.bigint "user_id"
+    t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_pages_on_user_id"
   end
 
-  create_table "templates", force: :cascade do |t|
+  create_table "projects", force: :cascade do |t|
+    t.string "title"
     t.string "identifier"
-    t.string "photoUrl"
-    t.bigint "user_id"
+    t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["user_id"], name: "index_templates_on_user_id"
+    t.index ["user_id"], name: "index_projects_on_user_id"
+  end
+
+  create_table "templates", force: :cascade do |t|
+    t.string "title"
+    t.string "identifier"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -42,5 +48,5 @@ ActiveRecord::Schema.define(version: 2020_09_03_015754) do
   end
 
   add_foreign_key "pages", "users"
-  add_foreign_key "templates", "users"
+  add_foreign_key "projects", "users"
 end

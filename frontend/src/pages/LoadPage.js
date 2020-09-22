@@ -10,12 +10,17 @@ import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import './LoadTemplate.css';
+import '../components/filters/FilmGrain.css';
+import TexturedPaper from '../assets/textures/textured_paper.png';
 
 export default function LoadPage() {
 
 
     const theme = createMuiTheme({
         palette: {
+            primary: {
+                main: 'rgba(240, 245, 243, 0.6)'
+            },
             text: {
                 primary: {
                     main: 'rgb(240, 245, 243)',
@@ -106,19 +111,25 @@ export default function LoadPage() {
 
     // const classes = useStyles();
     return (
-        <div className='viewport'>
+        <div className='viewport film-grain'>
+            <div style={{ position: 'absolute', height: '100vh', width: '100vw', backgroundImage: "url(" + TexturedPaper + ")", backgroundSize: 'auto', backgroundRepeat: 'repeat', mixBlendMode: 'overlay', opacity: 0.9 }} />
+            <a className='text log-out' onClick={() => history.goBack()}>BACK</a>
             <ThemeProvider theme={theme}>
                 {(pages.length > 0) ? (
-                    <Box className='list-center' minWidth={240}>
-                        <List>
+                    <Box className='list-center' minWidth='22%' maxWidth='30%' maxHeight='75%' overflow='auto' borderColor="primary.main">
+                        <h2 className='pages-header'>{username}'s pages</h2>
+                        <List style={{ padding: 0 }}>
                             {pages.map(page => {
                                 return (
-                                    <Box key={page.id} width='inherit' onClick={() => selectPage(page.id)}>
-                                        <ListItem className='text list' alignItems='center'>
-                                            <ListItemText className='text list'
-                                                secondary={`${page.created_at.split('T')[0]}`}
+                                    <Box key={page.id} className='list-box' width='inherit' onClick={() => selectPage(page.id)}>
+                                        <ListItem className='label-text' alignItems='center'>
+                                            <ListItemText
+                                                disableTypography
+                                                className='list-item-container'
+                                                secondary={<span className='list-secondary-text' id='page-item'>{page.created_at.split('T')[0]}</span>}
                                             >
-                                                {`${page.title}`}
+                                                <span className='list-text' id='page-item'>{page.title}</span>
+                                                {console.log(page.created_at)}
                                             </ListItemText>
                                         </ListItem>
                                     </Box>

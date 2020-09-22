@@ -1,0 +1,12 @@
+.translate-container {
+    position: absolute;
+    left: 10%;
+}
+
+.scale-container {
+    transform: scale(1.2525);
+}
+
+.overflow-container {
+    overflow-y: auto;
+}

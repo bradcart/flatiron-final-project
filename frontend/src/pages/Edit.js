@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from "react-router";
+import { useParams, useLocation, useHistory } from "react-router";
 import { Grid } from '@material-ui/core';
 import { Editor, Frame, Element } from "@craftjs/core";
-import { SettingsPanel } from '../components/SettingsPanel';
-import { MiniDrawer } from '../components/MiniDrawer';
+import { Layers } from "@craftjs/layers";
+import { Box } from '@material-ui/core';
+import { SocialLink } from '../components/user/SocialLink';
+import { EventList } from '../components/user/EventList';
+import { SettingsPanel } from '../components/editor/SettingsPanel';
+import { MiniDrawer } from '../components/editor/MiniDrawer';
 import { Container } from '../components/user/Container';
-import { ContainerMenu } from '../components/user/ContainerMenu';
 import { Button } from '../components/user/Button';
 import { Card, CardTop, CardBottom } from '../components/user/Card';
 import { Text } from '../components/user/Text';
@@ -27,21 +30,38 @@ import './Edit.css';
 
 export default function Edit() {
     // const [enabled, setEnabled] = useState(true);
-    const [json, setJson] = useState(null);
 
+    const [json, setJson] = useState(null);
+    const [title, setTitle] = useState('');
+    const location = useLocation();
     const { id } = useParams('id');
     useEffect(() => {
-        fetch(`http://localhost:3000/templates/${id}`, {
-            method: "GET",
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
-            }
-        })
-            .then(res => res.json())
-            .then(res => res["identifier"])
-            .then(result => lz.decompress(lz.decodeBase64(result)))
-            .then(result => setJson(result))
-    }, []);
+        location.pathname.includes('templates') ? (
+            fetch(`http://localhost:3000/templates/${id}`, {
+                method: "GET",
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+                .then(res => res.json())
+                .then(res => handleResponse(res))
+        ) : (
+                fetch(`http://localhost:3000/projects/${id}`, {
+                    method: "GET",
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                })
+                    .then(res => res.json())
+                    .then(res => handleResponse(res))
+            )
+    }, [location]);
+
+    const handleResponse = (res) => {
+        setTitle(res["title"]);
+        const identifier = lz.decompress(lz.decodeBase64(res["identifier"]));
+        setJson(identifier);
+    }
 
 
 
@@ -119,31 +139,29 @@ export default function Edit() {
     //     )
     // };
 
+    // const [pageView, togglePageView] = useState(false);
 
+    // const handlePageView = () => {
+    //     console.log('handling page view')
+    //     togglePageView(!pageView)
+    // };
+
+    // useEffect(() => {
+    //     console.log(pageView)
+    // }, [pageView])
 
     return (
-        <div style={{ position: 'relative', margin: "auto", minHeight: '100vh', backgroundImage: "url(" + Background + ")", backgroundSize: 'auto', backgroundRepeat: 'repeat' }}>
-            <Editor resolver={{ Card, Button, Text, Heading, Container, CardTop, CardBottom, Video, Song, FreeDrag, StyledBox, GridRow, GridCell, AutoGrid, Landing, DragBox, ImageContainer }}>
-                <Grid container wrap='nowrap'>
-                    <Grid item xs={2}>
-                        <MiniDrawer />
-                    </Grid>
-                    <Grid item xs={12}>
-                        {(json !== null) ? (
-                            <Grid className='frame-container' container>
-                                <Frame json={json}>
-                                    <Element is={Container} canvas>
-
-                                    </Element>
-                                </Frame>
-                            </Grid>
-                        ) : null}
-                    </Grid>
-                    <Grid item xs={2}>
-                        <SettingsPanel />
-                    </Grid>
-                </Grid>
+        <div style={{ position: 'relative', margin: '0 auto', minHeight: '100vh', width: '100vw', backgroundImage: "url(" + Background + ")", backgroundSize: 'auto', backgroundRepeat: 'repeat' }}>
+            <Editor resolver={{ Card, Button, Text, Heading, SocialLink, EventList, Container, CardTop, CardBottom, Video, Song, FreeDrag, StyledBox, GridRow, GridCell, AutoGrid, Landing, DragBox, ImageContainer }}>
+                <MiniDrawer title={title} />
+                {(json !== null) ? (
+                    <Frame json={json}>
+                        <Element is={Container} canvas width='80vw'>
+                        </Element>
+                    </Frame>
+                ) : null}
+                <SettingsPanel />
             </Editor>
-        </div>
+        </div >
     )
 };

@@ -16,7 +16,6 @@
     border: none;
     background-color: #070707;
     padding: 0px 20px;
-    font-size: 16px;
     height: 25%;
     cursor: pointer;
     display: inline-block;
@@ -29,14 +28,43 @@
 
 
 .text {
-    color: rgba(240, 245, 243, 0.6); 
+    color: rgba(240, 245, 243, 0.85); 
     font-family: 'raleway';
+    font-size: 28px;
     transition: 0.4s;
     cursor: pointer;
 }
 
 .text:hover {
-    color:#FFF;
+    color: rgba(255, 255, 255, 1);
+    text-shadow: 0 0 1px rgba(240, 245, 243, 0.7);
+}
+
+.label-text {
+    color: rgba(240, 245, 243, 0.75); 
+    font-family: 'raleway';
+    font-size: 19px;
+    transition: 0.4s;
+    cursor: default;
+}
+
+.text:hover + .label-text {
+    color: rgba(255, 255, 255, 1);
+}
+
+.pages-header {
+    color: rgba(255, 255, 255, 0.9); 
+    font-family: 'raleway';
+    font-size: 30px;
+    cursor: default;
+    margin: 0 auto 5vh auto;
+    word-spacing: 1vw;
+}
+
+.pages-divider {
+    margin: 5px auto 0 auto;
+    border-color: rgba(240, 245, 243, 0.6);
+    cursor: default;
 }
 
 .nothing-header {
@@ -51,16 +79,22 @@
 }
 
 .list {
-    color: rgba(240, 245, 243, 0.6); 
+    color: rgba(240, 245, 243, 0.8); 
     font-size: 42px;
     font-family: 'raleway';
     transition: 0.4s;
     cursor: pointer;
-    
 }
 
 .list:hover {
     color:#FFF;
+}
+
+.list-item-container {
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: default;
 }
 
 .list-center {
@@ -71,11 +105,38 @@
     text-align: center;
 }
 
+.list-box {
+    margin: 1vh auto;
+}
+
+.list-text {
+    color: rgba(240, 245, 243, 0.75); 
+    font-size: 20px;
+    font-family: 'raleway';
+    transition: 0.4s;
+    cursor: pointer;
+}
+
+.list-text:hover {
+    color:#FFF;
+}
+
+.list-secondary-text {
+    color: rgba(240, 245, 243, 0.7); 
+    font-family: "Courier New", Courier, monospace;
+    font-size: 16.5px;
+    cursor: default;
+}
+
+#page-item {
+    margin: 0 3%;
+}
+
 .log-out {
     position: absolute;
     width: 50%;
     font-size: 15px;
-    margin: 16px 0 0 0;
+    margin: 18px 0 0 0;
     left: 1.2vw;
 }
 
@@ -84,7 +145,7 @@
     position: relative;
     z-index: 0;
     width: 50%;
-    margin: auto;
+    margin: 2.5% auto -2.5% auto;
     text-align: center;
 }
 
@@ -94,7 +155,8 @@
     left: 50vw;
     transform: translateX(-50%);
     width: 15%;
-    bottom: 300px;
+    height: 100px;
+    bottom: 200px;
 }
 
 .container {
@@ -109,13 +171,13 @@
 .buttonBack {
     visibility: hidden;
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 5%;
+    left: 22%;
 }
 
 .buttonNext {
     visibility: hidden;
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 5%;
+    right: 22%;
 }

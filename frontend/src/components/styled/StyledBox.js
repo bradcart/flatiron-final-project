@@ -4,6 +4,7 @@ import { CirclePicker } from "react-color";
 import { useNode } from '@craftjs/core';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
+import DraggableCore from 'react-draggable';
 
 // border = 1 or 0;
 // borderColor = primary.main, secondary.main, etc;
@@ -28,8 +29,9 @@ export const StyledBox = ({
     return (
         <Box
             ref={ref => connect(drag(ref))}
+            id='handle'
             display="inline-flex"
-            position="fixed"
+            position="absolute"
             right={right}
             left={left}
             top={top}
@@ -69,6 +71,17 @@ export const StyledBoxSettings = () => {
 
     const [checked, toggleChecked] = useState(false);
     const [rounded, toggleRounded] = useState(false);
+    const [transparent, toggleTransparent] = useState(false);
+
+    const handleTransparent = () => {
+        if (transparent === true) {
+            toggleTransparent(false)
+            setProp(props => props.background = '#666666')
+        } else {
+            toggleTransparent(true)
+            setProp(props => props.background = 'transparent')
+        }
+    };
 
     const handleChecked = () => {
         if (checked === true) {
@@ -98,8 +111,8 @@ export const StyledBoxSettings = () => {
         setProp(props => props.alignItems = string)
     };
 
-    const colors = ["#76323F", "#a30003", "#e81d24", "#F17A7E", "#687864", "#008c58", "#005a23", "#5CDB95", "#efa202", "#ffc044", "#ffeb00", "#f54c2d", "#301934", "#032053", "#0f0bde", "#db0081"];
-    const neutrals = ["#FFFFFF", "#EFEFEF", "#E3E2DF", "#F0F5F3", "#E8DFE0", "#eee9dd", "#D8CFD0", "#413F3D", "#212121", "#1b1b1b", "#141414", "#000000"];
+    const colors = ["#76323F", "#DB4024", "#ff3a22", "#fea49f", "#acb7ae", "#008c58", "#005a23", "#5CDB95", "#efa202", "#ffc044", "#ffeb00", "#f54c2d", "#301934", "#032053", "#0f0bde", "#db0081"];
+    const neutrals = ["#FFFFFF", "#FBFFFF", "#F6F4F2", "#DEDDDB", "#EFEFEF", "#E3E2DF", "#F0F5F3", "#E8DFE0", "#eee9dd", "#D8CFD0", "#AFABA2", "#413F3D", "#212121", "#1b1b1b", "#141414", "#000000"];
 
     const [colorSection, setColorSection] = useState("COLORS");
     const [colorPalette, setColorPalette] = useState(colors);
@@ -140,8 +153,13 @@ export const StyledBoxSettings = () => {
                     onChange={color => {
                         setProp(props => props.background = color.hex)
                     }} />
+                <FormControlLabel
+                    control={<Checkbox checked={transparent} onChange={() => handleTransparent()} name="checked" />}
+                    label={<Typography id="settings-label" variant="body2" gutterBottom>TRANSPARENT</Typography>}
+                    style={{ margin: '15px auto 0 auto' }}
+                />
             </FormControl>
-            <Divider style={{ marginTop: '15px' }} />
+            <Divider style={{ marginTop: '10px' }} />
             <FormControl fullWidth={true} margin="normal" component="fieldset">
                 <Typography id="settings-label" variant="body2" gutterBottom>
                     WIDTH
@@ -159,20 +177,19 @@ export const StyledBoxSettings = () => {
                 <Typography id="settings-label" variant="body2" gutterBottom>
                     LEFT/RIGHT
                 </Typography>
-                <Slider min={0} max={1920} track='inverted' value={left} onChange={(_, value) => setProp(props => props.left = value)} />
+                <Slider min={-252} max={2212} value={left} valueLabelDisplay="auto" onChange={(_, value) => setProp(props => props.left = value)} />
             </FormControl>
             <FormControl fullWidth={true} margin="normal" component="fieldset">
                 <Typography id="settings-label" variant="body2" gutterBottom>
                     UP/DOWN
                 </Typography>
-                <Slider min={0} max={900} track='inverted' value={top} onChange={(_, value) => setProp(props => props.top = value)} />
+                <Slider min={0} max={2500} value={top} valueLabelDisplay="auto" onChange={(_, value) => setProp(props => props.top = value)} />
             </FormControl>
             <Divider />
             <FormControlLabel
                 control={<Checkbox checked={checked} onChange={() => handleChecked()} name="checked" />}
-                label={<Typography id="settings-label" variant="body2" gutterBottom>BORDERS</Typography>}
+                label={<Typography id="settings-label" variant="body2" gutterBottom>BORDER</Typography>}
             />
-
             <FormControlLabel
                 control={<Checkbox checked={rounded} onChange={() => handleRounded()} name="checked" />}
                 label={<Typography id="settings-label" variant="body2" gutterBottom>CIRCLE</Typography>}
@@ -181,10 +198,14 @@ export const StyledBoxSettings = () => {
             <Typography id="settings-label" variant="body2" gutterBottom>
                 JUSTIFY CONTENT
             </Typography>
-            <ButtonGroup fullWidth size="small" aria-label="contained secondary button group" style={{ marginBottom: '20px' }}>
+            <ButtonGroup fullWidth size="small" aria-label="contained secondary button group" style={{ marginBottom: '5px' }}>
                 <Button variant="contained" onClick={() => handleJustify('flex-start')}>LEFT</Button>
                 <Button variant="contained" onClick={() => handleJustify('center')}>CENTER</Button>
                 <Button variant="contained" onClick={() => handleJustify('flex-end')}>RIGHT</Button>
+            </ButtonGroup>
+            <ButtonGroup fullWidth size="small" aria-label="contained secondary button group" style={{ marginBottom: '20px' }}>
+                <Button variant="contained" onClick={() => handleJustify('space-around')}>EVEN</Button>
+                <Button variant="contained" onClick={() => handleJustify('space-between')}>FAR</Button>
             </ButtonGroup>
             <Typography id="settings-label" variant="body2" gutterBottom>
                 ALIGN ITEMS
@@ -204,9 +225,7 @@ export const StyledBoxDefaultProps = {
     width: '100px',
     height: '100px',
     top: 0,
-    bottom: 0,
     left: 0,
-    right: 0,
     justifyContent: 'center',
     alignItems: 'center'
 };

@@ -1,0 +1,48 @@
+/* .container-menu{
+    position: absolute;
+    z-index: 10000;
+    top: 1.364vh;
+    left: 85vw;
+} */
+
+#export-dialog-header {
+    margin-bottom: -15%;
+}
+
+#export-text {
+    position: relative;
+    font-family: 'raleway';
+    color: rgba(240, 245, 243, 0.8);
+    text-shadow: 0 0 1px #f0f5f3;
+    font-size: 36px;
+    margin-right: 20px;
+}
+
+#export-description {
+    position: relative;
+    color: rgba(240, 245, 243, 0.8); 
+    font-family: 'raleway';
+    font-size: 21px;
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+#export-form-helper {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+    font-variant: small-caps;
+}
+
+#export-text-field {
+    position: relative;
+}
+
+#export-dialog-button {
+    margin: 0 1%;
+    font-size: 16px;
+    width: 140px;
+}
+
+#export-button-footer {
+    margin-top: -20%;
+}

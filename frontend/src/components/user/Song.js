@@ -5,7 +5,7 @@ import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import EditIcon from '@material-ui/icons/Edit';
 import DragHandleIcon from '@material-ui/icons/DragHandle';
 import ReactPlayer from 'react-player/lazy';
-import './Video.css';
+import './Media.css';
 
 
 export const Song = ({ url, color }) => {
@@ -21,7 +21,7 @@ export const Song = ({ url, color }) => {
         <div className="video-div"
             ref={ref => connect(drag(ref))}
             onClickCapture={(e) => (e.stopPropagation())}
-            style={{ position: 'relative', width: '80%', height: '80%' }}>
+            style={{ position: 'absolute', width: '50%', height: '50%' }}>
             {enabled ? (
                 <div>
                     <Tooltip title="Drag" placement="left">
@@ -29,7 +29,7 @@ export const Song = ({ url, color }) => {
                             <DragHandleIcon ref={ref => connect(drag(ref))} className="edit-video-icon" />
                         </IconButton>
                     </Tooltip>
-                    <Tooltip title="Edit Video" placement="bottom">
+                    <Tooltip title="Edit Song" placement="bottom">
                         <IconButton
                             className="edit-video-btn"
                             onClick={() => {
@@ -91,16 +91,14 @@ const SongSettings = () => {
                     id="songUrl"
                     name="SONG URL"
                     onChange={e => setSongId(e.target.value)}
-                    style={{ borderRadius: '8px 0 0 8px' }}
                 />
                 <Button
                     type="submit"
                     size="medium"
-                    variant="contained"
-                    color="secondary"
+                    variant="outlined"
+                    color="primary"
                     fullWidth={false}
-                    style={{ marginTop: '7px', height: '40px', borderRadius: '0 8px 8px 0' }}
-                // className={classes.submit}
+                    style={{ marginTop: '7px' }}
                 >
                     CHANGE
                 </Button>

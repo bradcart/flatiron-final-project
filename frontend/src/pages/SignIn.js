@@ -141,7 +141,7 @@ export default function SignIn(props) {
                                 type="submit"
                                 fullWidth={true}
                                 className={classes.submit}
-                                label="SIGN IN"
+                                children="SIGN IN"
                             />
                         </Grid>
                         <Grid container>

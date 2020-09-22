@@ -10,5 +10,9 @@ Rails.application.routes.draw do
   post "/pages", to: "pages#create"
   get "/pages/:id", to: "pages#show"
   get "/pages", to: "pages#index"
+  get "/projects", to: "projects#index"
+  get "/projects/:id", to: "projects#show"
+  post "/projects", to: "projects#create"
+  patch "/projects/:id", to: "projects#update"
 end
 

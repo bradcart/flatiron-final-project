@@ -21,14 +21,14 @@
 
   #content {
     display: contents;
-    position:relative;
+    position: relative;
     z-index: 1;
     margin: auto;
-}
+  }
 
-#content::after {
-  background-image: url("paper_1_@2X.png");
-}
+  #content::after {
+    background-image: url("textured_paper.png");
+  }
 
   /* .slider {
     box-shadow: -2px 2px 22px #101010, 2px -2px 22px #121212;

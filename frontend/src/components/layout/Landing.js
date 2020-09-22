@@ -51,10 +51,10 @@ const LandingSettings = () => {
     const handleChecked = () => {
         if (checked === true) {
             toggleChecked(false)
-            setProp(props => props.borderColor = currentColor)
+            setProp(props => props.border = 0)
         } else {
             toggleChecked(true)
-            setProp(props => props.borderColor = 'black')
+            setProp(props => props.border = 1)
         }
     };
 

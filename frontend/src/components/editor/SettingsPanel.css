@@ -1,0 +1,13 @@
+#handle {
+    cursor: move; /* fallback if grab cursor is unsupported */
+    cursor: grab !important;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+}
+
+ /* (Optional) Apply a "closed-hand" cursor during drag operation. */
+#handle:active {
+    cursor: grabbing !important;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}

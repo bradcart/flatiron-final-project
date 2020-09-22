@@ -1,10 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import { useNode } from '@craftjs/core';
-import Draggable from 'react-draggable';
+import DraggableCore from 'react-draggable';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 
-const DragBox = ({ bottom, left, top, right }) => {
+const DragBox = ({bottom, left, top, right}) => {
 
 
 
@@ -35,14 +35,16 @@ const DragBox = ({ bottom, left, top, right }) => {
     //     return ref.current;
     // }
 
-
-
     const dragRef = useRef({
         bottom: bottom,
         left: left,
         top: top,
         right: right
     });
+
+    const handleFocus = () => {
+        dragRef.current.focus();
+    }
 
     const commitDrag = () => {
         const position = dragRef.current.getBoundingClientRect();
@@ -57,10 +59,12 @@ const DragBox = ({ bottom, left, top, right }) => {
         console.log(bottom)
     }
 
+    const savePosition = useMemo(
+        () => commitDrag(bottom, left, top, right), []
+    );
 
-    const handleFocus = () => {
-        dragRef.current.focus();
-    }
+
+
 
 
     // const updateState = () => {
@@ -102,12 +106,12 @@ const DragBox = ({ bottom, left, top, right }) => {
         setPosY(posY + ui.deltaY)
     }
 
-    
+
     return (
-        <Draggable
+        <DraggableCore
             onStart={handleFocus}
             onDrag={handleDrag}
-            // onStop={updateState}
+            onStop={savePosition}
         >
             <div ref={connect}>
                 <div ref={dragRef}>
@@ -141,14 +145,14 @@ const DragBox = ({ bottom, left, top, right }) => {
                     >
                         <div>Tacking Delta</div>
                         <div>x: {posX.toFixed(0)}, y: {posY.toFixed(0)}</div>
-                        <div>b: {bottom},<br/> t: {top},<br/> l: {left},<br/> r: {right}</div>
+                        <div>b: {bottom},<br /> t: {top},<br /> l: {left},<br /> r: {right}</div>
                         <Button onClick={commitDrag}>
                             commit drag
                     </Button>
                     </Box>
                 </div>
             </div>
-        </Draggable >
+        </DraggableCore >
     );
 }
 

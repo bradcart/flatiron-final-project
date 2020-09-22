@@ -2,15 +2,17 @@
   display: flex;
   flex-direction: row;
   margin: auto;
-  background-attachment: fixed;
+  background-attachment: fixed; 
 } */
 
-.container-paper {
-  /* position: absolute;
+/* .container-paper {
+  position: absolute;
   right: 10vw;
   height: 70vh;
   margin-top: 9vh;
-  min-width: 80vw; */
+  min-width: 80vw; 
+  display: flex;
+  justify-content: center;
   overflow-y: auto;
   overflow-x: hidden;
-}
+} */
